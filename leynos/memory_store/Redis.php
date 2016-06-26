@@ -21,7 +21,7 @@ use Predis\Client;
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-class Redis implements MemoryStore
+class Redis extends MemoryStore
 {
    /**
     * Reference to the Redis client.
@@ -31,21 +31,11 @@ class Redis implements MemoryStore
    private $_Redis;
 
    /**
-    * String token to use as the namespace for keys.
-    *
-    * @var string
-    */
-   private $_namespace = "";
-
-   /**
     * Connects to the Redis store.
-    *
-    * @param string $namespace
     */
-   public function __construct(string $namespace)
+   public function __construct()
    {
       $this->_Redis = new Client();
-      $this->_namespace = $namespace;
    }
 
    /**

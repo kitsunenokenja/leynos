@@ -16,7 +16,7 @@ use Exception;
 use kitsunenokenja\leynos\config\{Config, Options};
 use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException};
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
-use kitsunenokenja\leynos\memory_store\{MemoryStore, MemoryStoreException, Redis, Session};
+use kitsunenokenja\leynos\memory_store\{MemoryStore, MemoryStoreException, Session};
 use kitsunenokenja\leynos\route\{Group, Route, RoutingException};
 use kitsunenokenja\leynos\view\{FPDFView, JSONView, SpreadsheetException, TemplateException, TemplateView, View};
 use PDO;
@@ -156,8 +156,8 @@ class Kernel
          $this->_registerAutoloaders();
 
          // Connect to the framework cache
-         // TODO - Remove this hard-coded instance of Redis and make the memory store configurable.
-         $this->_MemStore = new Redis($this->_Config->getCacheNamespace());
+         $this->_MemStore = $this->_Config->getMemoryStore();
+         $this->_MemStore->setNamespace($this->_Config->getCacheNamespace());
 
          // Try to derive the execution routing path from the request
          $Route = $this->_parseRequestURL();

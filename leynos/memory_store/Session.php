@@ -18,7 +18,7 @@ namespace kitsunenokenja\leynos\memory_store;
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-class Session implements MemoryStore
+class Session extends MemoryStore
 {
    /**
     * Session constructor.

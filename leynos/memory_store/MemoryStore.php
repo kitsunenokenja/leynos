@@ -14,13 +14,30 @@ namespace kitsunenokenja\leynos\memory_store;
 /**
  * MemoryStore
  *
- * All memory stores must implement this interface. Implementations will wrap the memory stores they represent by
- * defining the methods enumerated here.
+ * All memory stores must extend this class. Implementations will wrap the memory stores they represent by defining the
+ * methods enumerated here.
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-interface MemoryStore
+abstract class MemoryStore
 {
+   /**
+    * String token to use as the namespace for keys.
+    *
+    * @var string
+    */
+   protected $_namespace = "";
+
+   /**
+    * Sets the namespace prefix for the memory store.
+    * 
+    * @param string $namespace
+    */
+   final public function setNamespace(string $namespace)
+   {
+      $this->_namespace = $namespace;
+   }
+   
    /**
     * Returns the value for the specified key from the memory store.
     *
@@ -28,7 +45,7 @@ interface MemoryStore
     *
     * @return mixed
     */
-   public function getKey(string $key);
+   abstract public function getKey(string $key);
 
    /**
     * Sets a value for the specified key in the memory store. If the key is already defined in the memory store, its
@@ -39,5 +56,5 @@ interface MemoryStore
     *
     * @return void
     */
-   public function setKey(string $key, $value);
+   abstract public function setKey(string $key, $value);
 }
