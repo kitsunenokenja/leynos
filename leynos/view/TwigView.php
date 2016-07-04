@@ -15,18 +15,14 @@ use LogicException;
 use Twig_Environment;
 use Twig_Error;
 use Twig_Loader_Filesystem;
-use Twig_SimpleFilter; // do not remove the imports for simple filter & function
-use Twig_SimpleFunction;
 
 /**
  * TwigView
  *
  * Wrapper for the Twig template engine. Twig requires configuration for basic settings and additional settings such as
- * the filters and functions definitions. Presently, this class can be modified directly, or extended to suit the
- * application's needs; therefore it is not defined as an abstract class.
- * 
- * TODO - Provide proper abstraction by converting this to a true abstract class and allow extensions to define Twig's
- * parameters and options.
+ * the filters and functions definitions. This class is not abstract as it defines a complete definition and can be used
+ * without modification. Customisations of this class should be prepared by extending it and defining the inherited
+ * methods accordingly.
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
@@ -46,16 +42,9 @@ class TwigView extends TemplateView
     *
     * @throws TemplateException Thrown if the function or filter registrations throw an exception.
     */
-   public function __construct(string $document_root)
+   final public function __construct(string $document_root)
    {
-      // Prepare the template engine
-      $this->_Twig = new Twig_Environment(
-         new Twig_Loader_Filesystem("$document_root/templates"),
-         [
-            'cache' => "$document_root/templates/cache",
-            'strict_variables' => true
-         ]
-      );
+      $this->_initializeTwig($document_root);
 
       try
       {
@@ -70,13 +59,31 @@ class TwigView extends TemplateView
    }
 
    /**
+    * Initialises a Twig instance. This method is designed to be overridden to facilitate customising settings and
+    * parameters for Twig.
+    *
+    * @param string $document_root
+    */
+   protected function _initializeTwig(string $document_root)
+   {
+      // Prepare the template engine
+      $this->_Twig = new Twig_Environment(
+         new Twig_Loader_Filesystem("$document_root/templates"),
+         [
+            'cache' => "$document_root/templates/cache",
+            'strict_variables' => true
+         ]
+      );
+   }
+
+   /**
     * Registers functions in Twig. Refer to Twig's documentation for the addFunction method.
     *
     * @throws LogicException
     */
    protected function _registerFunctions()
    {
-
+      // Default behaviour is nothing. Custom extensions are to define this method if it is required.
    }
 
    /**
@@ -86,7 +93,7 @@ class TwigView extends TemplateView
     */
    protected function _registerFilters()
    {
-
+      // Default behaviour is nothing. Custom extensions are to define this method if it is required.
    }
 
    /**
