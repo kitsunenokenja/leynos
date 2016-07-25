@@ -12,7 +12,7 @@
 namespace kitsunenokenja\leynos\view;
 
 /**
- * ViewInterface
+ * View
  *
  * All views must implement this interface. Views must define the following methods for the framework to use them to
  * render output.

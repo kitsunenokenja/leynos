@@ -192,6 +192,7 @@ class Kernel
          // Process the execution path dictated by the route by iterating through its controller list
          $data = $Route->getInputs();
          $Messages = $Session->getKey("_Messages") ?? [];
+         $PDFView = null;
          $success = true;
          foreach(array_merge($this->_Group->globalControllers(), $Route->getControllers()) as $controller)
          {
@@ -222,6 +223,11 @@ class Kernel
             // Capture controller outputs and messages
             $data = array_merge($data, $Controller->getOutputs());
             $Messages = array_merge($Messages, $Controller->getMessages());
+
+            // Only accept actual view instances to allow controllers that run after the one that actually outputs one
+            // without clobbering it
+            if($Controller->getPDFView() !== null)
+               $PDFView = $Controller->getPDFView();
 
             // End execution if the controller failed
             if(!$success)
@@ -281,12 +287,9 @@ class Kernel
                break;
 
             case "PDF":
-               // TODO - Arbitrary keys for $data array is not that elegant. Replace this with a specific controller
-               // extension that provides predictable getters returning these values.
-               // TODO - This also should not be a hard-coded FPDF view. Replace with abstraction of PDF view.
-               $this->_View = new FPDFView($data['PDF'] ?? null);
+               $this->_View = $PDFView;
                $this->_HTTPHeaders->contentType(HTTPHeaders::PDF);
-               $this->_HTTPHeaders->contentDisposition("{$data['file_name']}.pdf", true);
+               $this->_HTTPHeaders->contentDisposition("{$PDFView->getFileName()}.pdf", true);
                break;
          }
          $this->_View->render($data);

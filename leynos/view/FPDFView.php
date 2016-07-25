@@ -22,7 +22,7 @@ use fpdf\FPDF;
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-class FPDFView implements View
+class FPDFView implements PDFView
 {
    /**
     * Reference to the FPDF object containing the output in its buffer.
@@ -32,13 +32,22 @@ class FPDFView implements View
    private $_FPDF;
 
    /**
+    * Name of the file to output.
+    *
+    * @var string
+    */
+   private $_file_name;
+
+   /**
     * Creates the view by preparing with the FPDF object to render.
     *
-    * @param FPDF $FPDF
+    * @param FPDF   $FPDF
+    * @param string $file_name
     */
-   public function __construct(FPDF $FPDF)
+   public function __construct(FPDF $FPDF, string $file_name = "pdf")
    {
       $this->_FPDF = $FPDF;
+      $this->_file_name = $file_name;
    }
 
    /**
@@ -47,5 +56,13 @@ class FPDFView implements View
    public function render(array $data = [])
    {
       echo $this->_FPDF->Output("", 'S');
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getFileName(): string
+   {
+      return $this->_file_name;
    }
 }
