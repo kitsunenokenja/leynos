@@ -54,11 +54,39 @@ abstract class Config
    protected $_locale = "en_US.UTF-8";
 
    /**
+    * The routing pattern to be enforced by the framework and to identify a valid request for resolving which action to
+    * execute.
+    *
+    * The default pattern follows the pattern:
+    *
+    *    /group/action/format?query_string...
+    *
+    * where the trailing /format is optional as it defaults to standard HTML view when omitted, and the character sets
+    * for all matching groups captures standard ASCII as defined by PCRE's \w set. The purpose of allowing this pattern
+    * to be customised is to provide the flexibility to define a pattern suitable for the intended application, and to
+    * allow other desired characters to match such as Unicode.
+    *
+    * Customisation of this pattern must observe the following two rules:
+    *    1) Two capture groups must be defined to acknowledge the group and action names within the request.
+    *    2) A third capture group must be defined that identifies the type of view being requested. Although this
+    *       parameter is optional, as it is in the default, it is not necessary to be defined as optional, but doing so
+    *       is recommended.
+    *
+    * Not defining the third set as optional will cause the application to require defining the requested view format
+    * explicitly for all requests. In addition, while not strictly required for the framework to operate, it is highly
+    * recommended to preserve the query string check at the end as included in the default pattern. Failure to preserve
+    * this portion of the pattern will cause all requests using a query string to fail and likely break the application.
+    *
+    * @var string
+    */
+   protected $_routing_pattern = '#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#';
+
+   /**
     * Class name of the memory store implementation for the framework to use. The default is Redis to ensure a sane
     * default configuration.
-    * 
+    *
     * @see MemoryStore
-    * 
+    *
     * @var string
     */
    protected $_memory_store_class = Redis::class;
@@ -136,8 +164,18 @@ abstract class Config
    }
 
    /**
+    * Returns the routing pattern string.
+    *
+    * @return string
+    */
+   final public function getRoutingPattern(): string
+   {
+      return $this->_routing_pattern;
+   }
+
+   /**
     * Returns the memory store of the configured type.
-    * 
+    *
     * @return MemoryStore
     */
    final public function getMemoryStore(): MemoryStore
@@ -148,7 +186,7 @@ abstract class Config
 
    /**
     * Returns the template engine of the configured type.
-    * 
+    *
     * @param string $document_root
     *
     * @return TemplateView

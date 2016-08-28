@@ -397,9 +397,7 @@ class Kernel
     */
    private function _parseRequestURL(): Route
    {
-      // Valid routes have the pattern /group/route(/mode)?
-      // TODO - Consider making this regex configurable to allow custom chars or making routes Unicode friendly.
-      if(preg_match('#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#', $this->_request_url, $matches) !== 1)
+      if(preg_match($this->_Config->getRoutingPattern(), $this->_request_url, $matches) !== 1)
       {
          throw new RoutingException("Invalid request route.");
       }
