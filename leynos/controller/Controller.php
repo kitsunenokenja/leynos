@@ -72,6 +72,16 @@ abstract class Controller
    protected $_document_root;
 
    /**
+    * Internal copy of the HTTP Accept Language header passed down from the framework. Having this value allows a
+    * controller to make decisions with regard to localisation.
+    *
+    * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+    *
+    * @var string
+    */
+   protected $_accept_language;
+
+   /**
     * An instance of a view for facilitating PDF output. This member bridges the gap between the controller's task of
     * preparing PDF output data, and the framework having a data set handed off to push to the client.
     *
@@ -163,6 +173,16 @@ abstract class Controller
    public function setDocumentRoot(string $document_root)
    {
       $this->_document_root = $document_root;
+   }
+
+   /**
+    * Sets the accept language header's contents.
+    *
+    * @param string $accept_language
+    */
+   public function setAcceptLanguage(string $accept_language)
+   {
+      $this->_accept_language = $accept_language;
    }
 
    /**

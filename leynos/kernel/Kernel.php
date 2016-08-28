@@ -18,7 +18,7 @@ use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException};
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
 use kitsunenokenja\leynos\memory_store\{MemoryStore, MemoryStoreException, Session};
 use kitsunenokenja\leynos\route\{Group, Route, RoutingException};
-use kitsunenokenja\leynos\view\{FPDFView, JSONView, SpreadsheetException, TemplateException, TemplateView, View};
+use kitsunenokenja\leynos\view\{JSONView, SpreadsheetException, TemplateException, TemplateView, View};
 use PDO;
 use PDOException;
 
@@ -59,6 +59,17 @@ class Kernel
     * @var string
     */
    private $_response_mode = "HTML";
+
+   /**
+    * The HTTP Accept Language header's contents received from the client. The framework will pass this information
+    * along to the application which can elect to make localisation-related decisions based on the contents of this
+    * header.
+    *
+    * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+    *
+    * @var string
+    */
+   private $_accept_language;
 
    /**
     * Hash of permissions that belong to the authenticated user. These are used to authorise users to execute certain
@@ -196,10 +207,13 @@ class Kernel
          $success = true;
          foreach(array_merge($this->_Group->globalControllers(), $Route->getControllers()) as $controller)
          {
-            // Instantiate the controller and pass the document root to it
+            // Instantiate the controller
             /** @var Controller $Controller */
             $Controller = new $controller();
+
+            // Pass along the document root and accept language contents
             $Controller->setDocumentRoot($this->_document_root);
+            $Controller->setAcceptLanguage($this->_accept_language);
 
             // Pass the DB reference to the controller. If the DB was not connected, this safely passes null.
             $Controller->setDB($this->_DB);
@@ -358,14 +372,13 @@ class Kernel
 
    /**
     * Captures useful environment values provided by PHP's $_SERVER super-global and unsets it to free memory.
-    *
-    * TODO - Capture more valuable env info e.g. client's locale.
     */
    private function _processServerGlobal()
    {
-      $this->_document_root  = $_SERVER['DOCUMENT_ROOT'];
-      $this->_request_url    = $_SERVER['REQUEST_URI'];
-      $this->_request_method = $_SERVER['REQUEST_METHOD'] === "POST" ? "POST" : "GET";
+      $this->_document_root   = $_SERVER['DOCUMENT_ROOT'];
+      $this->_request_url     = $_SERVER['REQUEST_URI'];
+      $this->_request_method  = $_SERVER['REQUEST_METHOD'] === "POST" ? "POST" : "GET";
+      $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? "";
 
       unset($_SERVER);
    }
