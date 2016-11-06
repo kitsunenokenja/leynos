@@ -24,6 +24,10 @@ class Route
 {
    use OptionsOverrides;
 
+   // HTTP request types for routes
+   const GET = 1;
+   const POST = 2;
+
    /**
     * The route name.
     *
@@ -34,9 +38,9 @@ class Route
    /**
     * The HTTP request for which method the route is defined e.g. GET/POST.
     *
-    * @var string
+    * @var int
     */
-   private $_request_method = "GET";
+   private $_request_method = self::GET;
 
    /**
     * Any additional inputs may be defined.
@@ -119,9 +123,9 @@ class Route
    /**
     * Returns the request method.
     *
-    * @return string
+    * @return int
     */
-   public function getRequestMethod(): string
+   public function getRequestMethod(): int
    {
       return $this->_request_method;
    }
@@ -129,9 +133,9 @@ class Route
    /**
     * Sets the request method.
     *
-    * @param string $method
+    * @param int $method
     */
-   public function setRequestMethod(string $method)
+   public function setRequestMethod(int $method)
    {
       $this->_request_method = $method;
    }

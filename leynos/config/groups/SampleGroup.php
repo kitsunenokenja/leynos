@@ -55,7 +55,7 @@ class SampleGroup extends Group
         // Example of the request method call to designate the route as a POST handler rather than the default GET.
         // Ideally, at least one controller would be defined here because it should be processing a POST submission.
         $Route = new Route("post_action", []);
-        $Route->setRequestMethod("POST");
+        $Route->setRequestMethod(Route::POST);
         $this->addRoute($Route);
 
         // Redirection example. Either successful or failure redirection can be set, or both can be set. This is very

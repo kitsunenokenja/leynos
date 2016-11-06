@@ -48,9 +48,9 @@ class Kernel
    /**
     * Requested HTTP method i.e. GET/POST.
     *
-    * @var string
+    * @var int
     */
-   private $_request_method = "GET";
+   private $_request_method = Route::GET;
 
    /**
     * The mode in which the framework should respond based on the nature of the request. This mode dictates which view
@@ -377,7 +377,7 @@ class Kernel
    {
       $this->_document_root   = $_SERVER['DOCUMENT_ROOT'];
       $this->_request_url     = $_SERVER['REQUEST_URI'];
-      $this->_request_method  = $_SERVER['REQUEST_METHOD'] === "POST" ? "POST" : "GET";
+      $this->_request_method  = $_SERVER['REQUEST_METHOD'] === "POST" ? Route::POST : Route::GET;
       $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? "";
 
       unset($_SERVER);

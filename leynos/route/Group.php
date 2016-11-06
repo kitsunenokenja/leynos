@@ -27,7 +27,7 @@ abstract class Group
     *
     * @var Route[][]
     */
-   protected $_Routes = ['GET' => [], 'POST' => []];
+   protected $_Routes = [Route::GET => [], Route::POST => []];
 
    /**
     * Adds a route to the group by its name.
@@ -43,11 +43,11 @@ abstract class Group
     * Returns the route by name.
     *
     * @param string $route
-    * @param string $method
+    * @param int    $method
     *
     * @return Route|null
     */
-   final public function getRoute(string $route, string $method = "GET")
+   final public function getRoute(string $route, int $method = Route::GET)
    {
       return $this->_Routes[$method][$route] ?? null;
    }
