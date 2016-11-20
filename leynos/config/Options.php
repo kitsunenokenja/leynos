@@ -42,6 +42,13 @@ class Options
    private $_session_required = true;
 
    /**
+    * The designated login route for redirecting an unauthenticated user from a route that has session required enabled.
+    *
+    * @var string
+    */
+   private $_login_route = "";
+
+   /**
     * Determines whether a template engine should be initialised for usage within controllers. Some controllers require
     * access to template rendering engines like Twig to process string output more cleanly to refrain from generating
     * markup or other lengthy strings directly inline.
@@ -90,6 +97,26 @@ class Options
    public function setSessionRequired(bool $session_required)
    {
       $this->_session_required = $session_required;
+   }
+
+   /**
+    * Returns the login route.
+    *
+    * @return string
+    */
+   public function getLoginRoute(): string
+   {
+      return $this->_login_route;
+   }
+
+   /**
+    * Sets the login route.
+    *
+    * @param string $login_route
+    */
+   public function setLoginRoute(string $login_route)
+   {
+      $this->_login_route = $login_route;
    }
 
    /**

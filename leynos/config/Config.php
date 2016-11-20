@@ -12,7 +12,7 @@
 namespace kitsunenokenja\leynos\config;
 
 use Closure;
-use kitsunenokenja\leynos\memory_store\{MemoryStore, Redis};
+use kitsunenokenja\leynos\memory_store\{MemoryStore, Redis, Session};
 use kitsunenokenja\leynos\view\{TemplateView, TwigView};
 
 /**
@@ -228,4 +228,13 @@ abstract class Config
    {
       return $this->_routing_map[$group] ?? null;
    }
+
+   /**
+    * Returns whether the user is authenticated.
+    *
+    * @param Session $Session
+    *
+    * @return bool
+    */
+   abstract public function isAuthenticated(Session $Session);
 }

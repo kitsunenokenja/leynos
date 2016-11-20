@@ -12,6 +12,7 @@
 namespace kitsunenokenja\leynos\config;
 
 use kitsunenokenja\leynos\config\groups\SampleGroup;
+use kitsunenokenja\leynos\memory_store\Session;
 
 /**
  * SampleConfiguration
@@ -46,12 +47,16 @@ class SampleConfiguration extends Config
        * The routing map is an array of class names which must all be Group classes. This array defines which groups are
        * available and defined for the application. The individual groups themselves define all routes specific to them
        * within their respective classes. In this example, only one group is defined.
-       * 
+       *
        * Define all routing groups with this array keyed by route group names and values referring to group classes. For
        * example, if the sample group class defines a route named index, and the key here is sample_group, the path to
        * that route would be /sample_group/index.
        */
       $this->_routing_map = ['sample_group' => SampleGroup::class];
+
+      // For applications that will use the session required feature, a route must be defined for login redirects. The
+      // alternative is to disable the feature and use application-specific controllers to resolve the request.
+      $this->_Options->setLoginRoute("/authentication/login");
 
       /*
        * Autoloaders is an array of anonymous functions which will all be incorporated into the autoloader registration.
@@ -63,7 +68,10 @@ class SampleConfiguration extends Config
          function($class)
          {
             if(stream_resolve_include_path($file = str_replace(['_', '\0'], ['/', ''], $class) . ".php"))
+            {
+               /** @noinspection PhpIncludeInspection */
                require $file;
+            }
          },
          // Redis
          function($class)
@@ -71,13 +79,19 @@ class SampleConfiguration extends Config
             $class = str_replace('\\', '/', $class);
             $class = preg_replace('/^Predis/', "predis/src", $class);
             if(stream_resolve_include_path($file = "$class.php"))
+            {
+               /** @noinspection PhpIncludeInspection */
                require $file;
+            }
          },
          // Spout
          function($class)
          {
             if(stream_resolve_include_path($file = str_replace(['\\', "Box/Spout"], ['/', "Spout"], $class) . ".php"))
+            {
+               /** @noinspection PhpIncludeInspection */
                require $file;
+            }
          }
       ];
 
@@ -91,5 +105,18 @@ class SampleConfiguration extends Config
        * environments on the same PHP server.
        */
       $this->_cache_namespace = "sample_prefix";
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function isAuthenticated(Session $Session)
+   {
+      /*
+       * The application can represent authentication status within session in any way, and is not restricted to storing
+       * a primitive value as demonstrated here. For example, retrieving a data structure representing a user's session
+       * and calling a function of that object that will return the actual result.
+       */
+      return $Session->getKey("is_authenticated") === true;
    }
 }

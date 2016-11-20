@@ -193,12 +193,14 @@ class Kernel
          $Session->close();
 
          // If session is required then a valid login must be present
-         if($this->_Config->getOptions()->getSessionRequired())
+         if($this->_Config->getOptions()->getSessionRequired() && !$this->_Config->isAuthenticated($Session))
          {
-            /*
-             * TODO - Devise programmable handling for authenticated user enforcement. The original code was dependent
-             * on Leynos' original creation against an application which is wholly not portable.
-             */
+            // Ensure there is a route defined
+            if($this->_Config->getOptions()->getLoginRoute() === "")
+               throw new RoutingException("Session requirement is engaged without a defined login redirection route.");
+
+            // Redirect the unauthenticated user to the login route
+            $this->_HTTPHeaders->redirect($this->_Config->getOptions()->getLoginRoute());
          }
 
          // Check user authorisation
