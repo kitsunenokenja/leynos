@@ -182,7 +182,7 @@ class Kernel
          $this->_MemStore->setNamespace($this->_Config->getCacheNamespace());
 
          // Try to derive the execution routing path from the request
-         $Route = $this->_parseRequestURL();
+         $Route = $this->_parseRouteRequest($this->_request_url);
 
          // Open connection to DB for the controllers
          if($this->_Config->getOptions()->getConnectDatabase())
@@ -466,20 +466,22 @@ class Kernel
    }
 
    /**
-    * Parses the request URL to resolve which route to execute.
+    * Parses the route request to resolve which route to execute, then returns it.
+    *
+    * @param string $route_request
     *
     * @returns Route
     *
     * @throws RoutingException Thrown if the request is malformed or refers to an undefined route.
     */
-   private function _parseRequestURL(): Route
+   private function _parseRouteRequest(string $route_request): Route
    {
-      if(preg_match($this->_Config->getRoutingPattern(), $this->_request_url, $matches) !== 1)
+      if(preg_match($this->_Config->getRoutingPattern(), $route_request, $matches) !== 1)
       {
          throw new RoutingException("Invalid request route.");
       }
 
-      // Build a Request object from the request URL
+      // Build a request object from the route request
       $this->_Request = new Request($matches[1], $matches[2]);
       switch(isset($matches[3]) ? strtolower($matches[3]) : "html")
       {
