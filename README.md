@@ -8,9 +8,9 @@ objective should be to provide the essentials to facilitate a functional MVC des
 more.
 
 Leynos is designed to be flexible and reprogrammable via configuration. With proper interfacing, libraries can plug
-right into Leynos to power it which in turn powers your application. Connect template engines such as Twig, Blade, or
-Smarty, and memory stores such as Redis or memcached, as well as any database that can be accessed through PHP's PDO
-abstraction layer.
+right into Leynos to power it which in turn powers your application. Connect template engines such as Twig or Smarty,
+and memory stores such as Redis or memcached, as well as any database that can be accessed through PHP's PDO abstraction
+layer.
 
 This was originally a custom implementation for a specific application, then proceeded to evolve into a standalone
 framework which is its starting point here, beginning with ripping out any hard associations to the application it was
