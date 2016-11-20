@@ -15,6 +15,7 @@ use Error;
 use Exception;
 use kitsunenokenja\leynos\config\{Config, Options};
 use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException};
+use kitsunenokenja\leynos\file_system\PostFile;
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
 use kitsunenokenja\leynos\memory_store\{MemoryStore, MemoryStoreException, Session};
 use kitsunenokenja\leynos\route\{Group, Route, RoutingException};
@@ -101,6 +102,13 @@ class Kernel
    private $_Request;
 
    /**
+    * Array of post files.
+    *
+    * @var PostFile[]
+    */
+   private $_Files = [];
+
+   /**
     * Reference to the Group derived from the request for the current execution instance.
     *
     * @var Group
@@ -163,6 +171,9 @@ class Kernel
          // Obtain server environment variables and free the super-global from memory
          $this->_processServerGlobal();
 
+         // Process the standard files super-global
+         $this->_processFilesGlobal();
+
          // Register additional necessary autoloaders from the config
          $this->_registerAutoloaders();
 
@@ -224,6 +235,7 @@ class Kernel
             // Always provide references to request/memory stores.
             $Controller->addInput("Session", $Session);
             $Controller->addInput("Request", $this->_Request);
+            $Controller->addInput("Files", $this->_Files);
             $Controller->addInput("MemStore", $this->_MemStore);
             $Controller->addInput("TemplateEngine", $this->_TemplateEngine);
 
@@ -381,6 +393,58 @@ class Kernel
       $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? "";
 
       unset($_SERVER);
+   }
+
+   /**
+    * Processes the $_FILES super-global and populates the internal post files array, then unsets to free memory.
+    */
+   private function _processFilesGlobal()
+   {
+      // If there are no post files, drop the super-global and return immediately
+      if(empty($_FILES))
+      {
+         unset($_FILES);
+         return;
+      }
+
+      foreach($_FILES as $key_name => $details)
+      {
+         // If the details are not an array, the key points to a single file
+         if(!is_array($details))
+         {
+            // Ignore invalid or fraudulent attempts
+            if(!is_uploaded_file($details['tmp_name']))
+               continue;
+
+            $this->_Files[] = new PostFile(
+               $details['name'],
+               $details['type'],
+               $details['size'],
+               $details['tmp_name'],
+               $details['error']
+            );
+         }
+         // Otherwise, the key is for a submission of multiple files
+         else
+         {
+            foreach($details['name'] as $index => $name)
+            {
+               // Ignore invalid or fraudulent attempts
+               if(!is_uploaded_file($details['tmp_name']))
+                  continue;
+
+               $this->_Files[] = new PostFile(
+                  $name,
+                  $details['type'][$index],
+                  $details['size'][$index],
+                  $details['tmp_name'][$index],
+                  $details['error'][$index]
+               );
+            }
+         }
+      }
+
+      unset($_FILES);
    }
 
    /**
