@@ -37,7 +37,7 @@ class Headers
     *
     * @param Cookie $Cookie
     */
-   public function setCookie(Cookie $Cookie)
+   public function setCookie(Cookie $Cookie): void
    {
       setcookie(
          $Cookie->getName(),
@@ -56,7 +56,7 @@ class Headers
     *
     * @param string $redirect_url
     */
-   public function redirect(string $redirect_url)
+   public function redirect(string $redirect_url): void
    {
       header(self::VERSION . "303 See Other");
       header("Location: $redirect_url");
@@ -68,7 +68,7 @@ class Headers
     *
     * @param string $mime
     */
-   public function contentType(string $mime = self::HTML)
+   public function contentType(string $mime = self::HTML): void
    {
       header("Content-Type: $mime");
    }
@@ -79,7 +79,7 @@ class Headers
     * @param string $filename
     * @param bool   $inline
     */
-   public function contentDisposition(string $filename, bool $inline = false)
+   public function contentDisposition(string $filename, bool $inline = false): void
    {
       $disposition = $inline ? "inline" : "attachment";
       header("Content-Disposition: $disposition; filename=$filename");
@@ -88,7 +88,7 @@ class Headers
    /**
     * Outputs HTTP 403 Forbidden for handling requests that are denied due to insufficient permissions.
     */
-   public function forbidden()
+   public function forbidden(): void
    {
       header(self::VERSION . "403 Forbidden");
    }
@@ -96,7 +96,7 @@ class Headers
    /**
     * Outputs HTTP 404 Not Found for handling invalid route requests.
     */
-   public function notFound()
+   public function notFound(): void
    {
       header(self::VERSION . "404 Not Found");
    }
@@ -104,7 +104,7 @@ class Headers
    /**
     * Outputs HTTP 500 Internal Server Error for handling low-level framework failures.
     */
-   public function internalServerError()
+   public function internalServerError(): void
    {
       header(self::VERSION . "500 Internal Server Error");
    }

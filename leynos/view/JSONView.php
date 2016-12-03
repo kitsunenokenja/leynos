@@ -23,7 +23,7 @@ class JSONView implements View
    /**
     * {@inheritdoc}
     */
-   public function render(array $data = [])
+   public function render(array $data = []): void
    {
       $json = json_encode($data);
 

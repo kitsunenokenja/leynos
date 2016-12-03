@@ -126,7 +126,7 @@ class DBCredentials
     *
     * @param string $driver
     */
-   public function setDriver(string $driver)
+   public function setDriver(string $driver): void
    {
       $this->_driver = $driver;
    }

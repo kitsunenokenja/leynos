@@ -108,7 +108,7 @@ abstract class Controller
     *
     * @return bool
     */
-   final public function __isset(string $key)
+   final public function __isset(string $key): bool
    {
       return isset($this->_in[$key]) || isset($this->_in['_data'][$key]);
    }
@@ -119,7 +119,7 @@ abstract class Controller
     * @param string $key
     * @param mixed  $value
     */
-   public function addInput(string $key, $value)
+   public function addInput(string $key, $value): void
    {
       $this->_in[$key] = $value;
    }
@@ -149,7 +149,7 @@ abstract class Controller
     *
     * @param PDO $DB
     */
-   public function setDB(PDO $DB = null)
+   public function setDB(PDO $DB = null): void
    {
       $this->_DB = $DB;
    }
@@ -160,7 +160,7 @@ abstract class Controller
     *
     * @param Headers $HTTPHeaders
     */
-   public function setHTTPHeaders(Headers $HTTPHeaders)
+   public function setHTTPHeaders(Headers $HTTPHeaders): void
    {
       $this->_HTTPHeaders = $HTTPHeaders;
    }
@@ -170,7 +170,7 @@ abstract class Controller
     *
     * @param string $document_root
     */
-   public function setDocumentRoot(string $document_root)
+   public function setDocumentRoot(string $document_root): void
    {
       $this->_document_root = $document_root;
    }
@@ -180,7 +180,7 @@ abstract class Controller
     *
     * @param string $accept_language
     */
-   public function setAcceptLanguage(string $accept_language)
+   public function setAcceptLanguage(string $accept_language): void
    {
       $this->_accept_language = $accept_language;
    }
@@ -190,7 +190,7 @@ abstract class Controller
     *
     * @return PDFView
     */
-   public function getPDFView()
+   public function getPDFView(): ?PDFView
    {
       return $this->_PDFView;
    }

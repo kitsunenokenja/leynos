@@ -61,35 +61,35 @@ class Route
     *
     * @var string
     */
-   private $_template = "";
+   private $_template;
 
    /**
     * The permission token required to access the route. If this remains as an empty string, no permission is required.
     *
     * @var string
     */
-   private $_permission_token = "";
+   private $_permission_token;
 
    /**
     * Error message to display if a controller returns unsuccessfully.
     *
     * @var string
     */
-   private $_error = "";
+   private $_error;
 
    /**
     * If set, a redirect is triggered to this route rather than responding normally.
     *
     * @var string
     */
-   private $_redirect_route = "";
+   private $_redirect_route;
 
    /**
     * If set, a redirect is triggered to this route rather than responding normally upon failing controller.
     *
     * @var string
     */
-   private $_failure_route = "";
+   private $_failure_route;
 
    /**
     * Routine that modifies the global options.
@@ -135,7 +135,7 @@ class Route
     *
     * @param int $method
     */
-   public function setRequestMethod(int $method)
+   public function setRequestMethod(int $method): void
    {
       $this->_request_method = $method;
    }
@@ -156,7 +156,7 @@ class Route
     * @param string $key
     * @param mixed  $value
     */
-   public function addInput(string $key, $value)
+   public function addInput(string $key, $value): void
    {
       $this->_inputs[$key] = $value;
    }
@@ -176,7 +176,7 @@ class Route
     *
     * @return string
     */
-   public function getTemplate(): string
+   public function getTemplate(): ?string
    {
       return $this->_template;
    }
@@ -186,7 +186,7 @@ class Route
     *
     * @param string $template
     */
-   public function setTemplate(string $template)
+   public function setTemplate(string $template): void
    {
       $this->_template = $template;
    }
@@ -196,7 +196,7 @@ class Route
     *
     * @return string
     */
-   public function getPermissionToken(): string
+   public function getPermissionToken(): ?string
    {
       return $this->_permission_token;
    }
@@ -206,7 +206,7 @@ class Route
     *
     * @param string $permission_token
     */
-   public function setPermissionToken(string $permission_token)
+   public function setPermissionToken(string $permission_token): void
    {
       $this->_permission_token = $permission_token;
    }
@@ -216,7 +216,7 @@ class Route
     *
     * @return string
     */
-   public function getError(): string
+   public function getError(): ?string
    {
       return $this->_error;
    }
@@ -226,7 +226,7 @@ class Route
     *
     * @return string
     */
-   public function getRedirectRoute(): string
+   public function getRedirectRoute(): ?string
    {
       return $this->_redirect_route;
    }
@@ -236,7 +236,7 @@ class Route
     *
     * @param string $redirect_route
     */
-   public function setRedirectRoute(string $redirect_route)
+   public function setRedirectRoute(string $redirect_route): void
    {
       $this->_redirect_route = $redirect_route;
    }
@@ -246,7 +246,7 @@ class Route
     *
     * @return string
     */
-   public function getFailureRoute(): string
+   public function getFailureRoute(): ?string
    {
       return $this->_failure_route;
    }
@@ -256,7 +256,7 @@ class Route
     *
     * @param string $failure_route
     */
-   public function setFailureRoute(string $failure_route)
+   public function setFailureRoute(string $failure_route): void
    {
       $this->_failure_route = $failure_route;
    }
@@ -266,7 +266,7 @@ class Route
     *
     * @param Options $Options
     */
-   public function modifyOptions(Options $Options)
+   public function modifyOptions(Options $Options): void
    {
       if($this->_OptionsModifier !== null)
          call_user_func($this->_OptionsModifier, $Options);
@@ -277,7 +277,7 @@ class Route
     *
     * @param callable $func
     */
-   public function setOptionsModifier(callable $func)
+   public function setOptionsModifier(callable $func): void
    {
       $this->_OptionsModifier = $func;
    }

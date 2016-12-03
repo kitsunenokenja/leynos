@@ -84,7 +84,7 @@ class Request
     *
     * @return bool
     */
-   public function __isset(string $name)
+   public function __isset(string $name): bool
    {
       return isset($this->_data[$name]);
    }
@@ -115,7 +115,7 @@ class Request
     *
     * @param array $array
     */
-   private function _sanitizeKeys(array &$array)
+   private function _sanitizeKeys(array &$array): void
    {
       foreach($array as $k => $v)
       {
@@ -139,7 +139,7 @@ class Request
     *
     * @param array $array
     */
-   private function _sanitizeValues(array &$array)
+   private function _sanitizeValues(array &$array): void
    {
       foreach($array as $k => $v)
       {

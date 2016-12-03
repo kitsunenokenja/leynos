@@ -224,7 +224,7 @@ abstract class Config
     *
     * @return string|null
     */
-   final public function getRoutingGroup(string $group)
+   final public function getRoutingGroup(string $group): ?string
    {
       return $this->_routing_map[$group] ?? null;
    }
@@ -236,5 +236,5 @@ abstract class Config
     *
     * @return bool
     */
-   abstract public function isAuthenticated(Session $Session);
+   abstract public function isAuthenticated(Session $Session): bool;
 }

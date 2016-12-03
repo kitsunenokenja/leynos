@@ -40,7 +40,7 @@ class Redis extends MemoryStore
 
    /**
     * {@inheritdoc
-    * 
+    *
     * @throws MemoryStoreException Thrown upon memory store I/O failure.
     */
    public function getKey(string $key)
@@ -60,7 +60,7 @@ class Redis extends MemoryStore
     *
     * @throws MemoryStoreException Thrown upon memory store I/O failure.
     */
-   public function setKey(string $key, $value)
+   public function setKey(string $key, $value): void
    {
       try
       {

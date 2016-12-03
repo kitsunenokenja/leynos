@@ -30,14 +30,14 @@ abstract class MemoryStore
 
    /**
     * Sets the namespace prefix for the memory store.
-    * 
+    *
     * @param string $namespace
     */
-   final public function setNamespace(string $namespace)
+   final public function setNamespace(string $namespace): void
    {
       $this->_namespace = $namespace;
    }
-   
+
    /**
     * Returns the value for the specified key from the memory store.
     *
@@ -56,5 +56,5 @@ abstract class MemoryStore
     *
     * @return void
     */
-   abstract public function setKey(string $key, $value);
+   abstract public function setKey(string $key, $value): void;
 }

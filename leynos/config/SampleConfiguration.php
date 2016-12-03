@@ -110,7 +110,7 @@ class SampleConfiguration extends Config
    /**
     * {@inheritdoc}
     */
-   public function isAuthenticated(Session $Session)
+   public function isAuthenticated(Session $Session): bool
    {
       /*
        * The application can represent authentication status within session in any way, and is not restricted to storing

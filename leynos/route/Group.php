@@ -34,7 +34,7 @@ abstract class Group
     *
     * @param Route $Route
     */
-   final public function addRoute(Route $Route)
+   final public function addRoute(Route $Route): void
    {
       $this->_Routes[$Route->getRequestMethod()][$Route->getName()] = $Route;
    }
@@ -47,7 +47,7 @@ abstract class Group
     *
     * @return Route|null
     */
-   final public function getRoute(string $route, int $method = Route::GET)
+   final public function getRoute(string $route, int $method = Route::GET): ?Route
    {
       return $this->_Routes[$method][$route] ?? null;
    }

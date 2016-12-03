@@ -13,7 +13,7 @@ namespace kitsunenokenja\leynos\view;
 
 /**
  * TemplateView
- * 
+ *
  * This abstract serves as a basis of the general View interface for template engine views to extend.
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
@@ -25,14 +25,14 @@ abstract class TemplateView implements View
     *
     * @var string
     */
-   protected $_template = "";
-   
+   protected $_template;
+
    /**
     * Sets the relative path to the template to render.
     *
     * @param string $template
     */
-   final public function setTemplate(string $template)
+   final public function setTemplate(string $template): void
    {
       $this->_template = $template;
    }

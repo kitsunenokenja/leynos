@@ -53,7 +53,7 @@ class FPDFView implements PDFView
    /**
     * {@inheritdoc}
     */
-   public function render(array $data = [])
+   public function render(array $data = []): void
    {
       echo $this->_FPDF->Output("", 'S');
    }

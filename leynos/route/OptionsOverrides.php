@@ -44,7 +44,7 @@ trait OptionsOverrides
     *
     * @param bool $setting
     */
-   public function setConnectDatabase(bool $setting)
+   public function setConnectDatabase(bool $setting): void
    {
       $this->_overrides[Options::CONNECT_DATABASE] = $setting;
    }
@@ -54,7 +54,7 @@ trait OptionsOverrides
     *
     * @param bool $setting
     */
-   public function setSessionRequired(bool $setting)
+   public function setSessionRequired(bool $setting): void
    {
       $this->_overrides[Options::SESSION_REQUIRED] = $setting;
    }
@@ -64,7 +64,7 @@ trait OptionsOverrides
     *
     * @param bool $setting
     */
-   public function setEnableTemplateEngine(bool $setting)
+   public function setEnableTemplateEngine(bool $setting): void
    {
       $this->_overrides[Options::ENABLE_TEMPLATE_ENGINE] = $setting;
    }

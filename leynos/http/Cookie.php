@@ -33,7 +33,7 @@ class Cookie
     *
     * @var string
     */
-   private $_value = "";
+   private $_value;
 
    /**
     * Unix timestamp of the expiry date. 0 is defined as expiring at the end of session.
@@ -47,14 +47,14 @@ class Cookie
     *
     * @var string
     */
-   private $_path = "";
+   private $_path;
 
    /**
     * Domain or subdomain for which the cookie is valid.
     *
     * @var string
     */
-   private $_domain = "";
+   private $_domain;
 
    /**
     * Indicates whether the cookie is only available over HTTPS.
@@ -95,7 +95,7 @@ class Cookie
     *
     * @return string
     */
-   public function getValue(): string
+   public function getValue(): ?string
    {
       return $this->_value;
    }
@@ -105,7 +105,7 @@ class Cookie
     *
     * @param string $value
     */
-   public function setValue(string $value)
+   public function setValue(string $value): void
    {
       $this->_value = $value;
    }
@@ -125,7 +125,7 @@ class Cookie
     *
     * @param int $expiry Time in Unix timestamp format.
     */
-   public function setExpiry(int $expiry)
+   public function setExpiry(int $expiry): void
    {
       $this->_expiry = $expiry;
    }
@@ -135,7 +135,7 @@ class Cookie
     *
     * @return string
     */
-   public function getPath(): string
+   public function getPath(): ?string
    {
       return $this->_path;
    }
@@ -145,7 +145,7 @@ class Cookie
     *
     * @param string $path
     */
-   public function setPath(string $path)
+   public function setPath(string $path): void
    {
       $this->_path = $path;
    }
@@ -155,7 +155,7 @@ class Cookie
     *
     * @return string
     */
-   public function getDomain(): string
+   public function getDomain(): ?string
    {
       return $this->_domain;
    }
@@ -165,7 +165,7 @@ class Cookie
     *
     * @param string $domain
     */
-   public function setDomain(string $domain)
+   public function setDomain(string $domain): void
    {
       $this->_domain = $domain;
    }
@@ -185,7 +185,7 @@ class Cookie
     *
     * @param bool $secure
     */
-   public function setSecure(bool $secure)
+   public function setSecure(bool $secure): void
    {
       $this->_secure = $secure;
    }
@@ -205,7 +205,7 @@ class Cookie
     *
     * @param bool $http_only
     */
-   public function setHTTPOnly(bool $http_only)
+   public function setHTTPOnly(bool $http_only): void
    {
       $this->_http_only = $http_only;
    }

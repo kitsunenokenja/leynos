@@ -1,5 +1,5 @@
 # Leynos
-Lightweight PHP7 MVC framework featuring chainable controllers.
+Lightweight PHP7 MVC framework featuring chainable controllers. PHP ≥ 7.1.0 is required.
 
 The Leynos framework project aims to provide an open source MVC framework written entirely in PHP7. This framework is
 designed to be as flexible as it is compact. Most PHP applications built with the MVC pattern running atop a framework

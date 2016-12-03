@@ -160,7 +160,7 @@ class Kernel
    /**
     * Initialises the framework.
     */
-   private function _boot()
+   private function _boot(): void
    {
       try
       {
@@ -196,7 +196,7 @@ class Kernel
          if($this->_Config->getOptions()->getSessionRequired() && !$this->_Config->isAuthenticated($Session))
          {
             // Ensure there is a route defined
-            if($this->_Config->getOptions()->getLoginRoute() === "")
+            if($this->_Config->getOptions()->getLoginRoute() === null)
                throw new RoutingException("Session requirement is engaged without a defined login redirection route.");
 
             // Redirect the unauthenticated user to the login route
@@ -204,7 +204,7 @@ class Kernel
          }
 
          // Check user authorisation
-         if($Route->getPermissionToken() !== "" && empty($this->_permissions[$Route->getPermissionToken()]))
+         if($Route->getPermissionToken() !== null && empty($this->_permissions[$Route->getPermissionToken()]))
             throw new UnauthorizedActionException("Unauthorised request from authenticated user.");
 
          // Prepare a template engine for controllers if the route requires it
@@ -270,10 +270,10 @@ class Kernel
          }
 
          // Check for redirects prior to defaulting to rendering a view
-         if($success && $Route->getRedirectRoute() !== "")
+         if($success && $Route->getRedirectRoute() !== null)
             $this->_HTTPHeaders->redirect($Route->getRedirectRoute());
 
-         if(!$success && $Route->getFailureRoute() !== "")
+         if(!$success && $Route->getFailureRoute() !== null)
             $this->_HTTPHeaders->redirect($Route->getFailureRoute());
 
          // Check for failure without redirects
@@ -369,14 +369,7 @@ class Kernel
          $this->_renderError("Internal server error.");
       }
       // All unhandled exceptions will return as a server fault
-      catch(Exception $E)
-      {
-         trigger_error($E->getMessage(), E_USER_WARNING);
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Internal server error.");
-      }
-      // Unhandled fatal errors exit gracefully with a server fault
-      catch(Error $E)
+      catch(Exception | Error $E)
       {
          trigger_error($E->getMessage(), E_USER_WARNING);
          $this->_HTTPHeaders->internalServerError();
@@ -387,12 +380,12 @@ class Kernel
    /**
     * Captures useful environment values provided by PHP's $_SERVER super-global and unsets it to free memory.
     */
-   private function _processServerGlobal()
+   private function _processServerGlobal(): void
    {
       $this->_document_root   = $_SERVER['DOCUMENT_ROOT'];
       $this->_request_url     = $_SERVER['REQUEST_URI'];
       $this->_request_method  = $_SERVER['REQUEST_METHOD'] === "POST" ? Route::POST : Route::GET;
-      $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? "";
+      $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null;
 
       unset($_SERVER);
    }
@@ -400,7 +393,7 @@ class Kernel
    /**
     * Processes the $_FILES super-global and populates the internal post files array, then unsets to free memory.
     */
-   private function _processFilesGlobal()
+   private function _processFilesGlobal(): void
    {
       // If there are no post files, drop the super-global and return immediately
       if(empty($_FILES))
@@ -540,7 +533,7 @@ class Kernel
     *
     * @throws PDOException Thrown if the connection to DB fails.
     */
-   private function _connectDatabase()
+   private function _connectDatabase(): void
    {
       $Cred = $this->_Config->getDBCredentials();
       $this->_DB = new PDO(
@@ -561,7 +554,7 @@ class Kernel
     * will likely be a last-effort reroute which will die with plain text if it still can't succeed, avoiding infinite
     * redirects to itself.
     */
-   private function _renderError(string $message)
+   private function _renderError(string $message): void
    {
       try
       {
@@ -596,7 +589,7 @@ class Kernel
     *
     * @param bool[] $overrides
     */
-   private function _overrideOptions(array $overrides)
+   private function _overrideOptions(array $overrides): void
    {
       $Options = $this->_Config->getOptions();
       $Options->setConnectDatabase($overrides[Options::CONNECT_DATABASE] ?? $Options->getConnectDatabase());

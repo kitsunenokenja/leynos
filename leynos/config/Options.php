@@ -46,7 +46,7 @@ class Options
     *
     * @var string
     */
-   private $_login_route = "";
+   private $_login_route = null;
 
    /**
     * Determines whether a template engine should be initialised for usage within controllers. Some controllers require
@@ -74,7 +74,7 @@ class Options
     *
     * @param bool $connect_database
     */
-   public function setConnectDatabase(bool $connect_database)
+   public function setConnectDatabase(bool $connect_database): void
    {
       $this->_connect_database = $connect_database;
    }
@@ -94,7 +94,7 @@ class Options
     *
     * @param bool $session_required
     */
-   public function setSessionRequired(bool $session_required)
+   public function setSessionRequired(bool $session_required): void
    {
       $this->_session_required = $session_required;
    }
@@ -104,7 +104,7 @@ class Options
     *
     * @return string
     */
-   public function getLoginRoute(): string
+   public function getLoginRoute(): ?string
    {
       return $this->_login_route;
    }
@@ -114,7 +114,7 @@ class Options
     *
     * @param string $login_route
     */
-   public function setLoginRoute(string $login_route)
+   public function setLoginRoute(string $login_route): void
    {
       $this->_login_route = $login_route;
    }
@@ -134,7 +134,7 @@ class Options
     *
     * @param bool $enable_template_engine
     */
-   public function setEnableTemplateEngine(bool $enable_template_engine)
+   public function setEnableTemplateEngine(bool $enable_template_engine): void
    {
       $this->_enable_template_engine = $enable_template_engine;
    }

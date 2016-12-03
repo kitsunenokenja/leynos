@@ -43,7 +43,7 @@ class Session extends MemoryStore
     *
     * @throws MemoryStoreException
     */
-   public function open()
+   public function open(): void
    {
       if(session_status() === PHP_SESSION_NONE && !session_start())
       {
@@ -54,7 +54,7 @@ class Session extends MemoryStore
    /**
     * Commits the session.
     */
-   public function close()
+   public function close(): void
    {
       if(session_status() === PHP_SESSION_ACTIVE)
       {
@@ -65,7 +65,7 @@ class Session extends MemoryStore
    /**
     * Destroys the session.
     */
-   public function destroy()
+   public function destroy(): void
    {
       $this->open();
       $_SESSION = [];
@@ -77,7 +77,7 @@ class Session extends MemoryStore
     *
     * @throws MemoryStoreException
     */
-   public function regenerate()
+   public function regenerate(): void
    {
       if(!session_regenerate_id(true))
          throw new MemoryStoreException("Failed to regenerate session ID");
@@ -85,7 +85,7 @@ class Session extends MemoryStore
 
    /**
     * Returns the name of the session.
-    * 
+    *
     * @return string
     */
    public function getName(): string
@@ -106,7 +106,7 @@ class Session extends MemoryStore
     *
     * @throws MemoryStoreException
     */
-   public function setKey(string $key, $value)
+   public function setKey(string $key, $value): void
    {
       if(session_status() !== PHP_SESSION_ACTIVE)
          throw new MemoryStoreException("Attempting to write to inactive session!");

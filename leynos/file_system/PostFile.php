@@ -110,7 +110,7 @@ class PostFile
     *
     * @param string $name
     */
-   public function setName(string $name)
+   public function setName(string $name): void
    {
       $this->_name = $name;
    }
@@ -130,7 +130,7 @@ class PostFile
     *
     * @param string $type
     */
-   public function setType(string $type)
+   public function setType(string $type): void
    {
       $this->_type = $type;
    }
@@ -150,7 +150,7 @@ class PostFile
     *
     * @param int $size
     */
-   public function setSize(int $size)
+   public function setSize(int $size): void
    {
       $this->_size = $size;
    }
@@ -170,7 +170,7 @@ class PostFile
     *
     * @param string $temp_name
     */
-   public function setTempName(string $temp_name)
+   public function setTempName(string $temp_name): void
    {
       $this->_temp_name = $temp_name;
    }
@@ -190,7 +190,7 @@ class PostFile
     *
     * @param int $error
     */
-   public function setError(int $error)
+   public function setError(int $error): void
    {
       $this->_error = $error;
    }

@@ -12,7 +12,7 @@
 /**
  * This procedural code is the bootstrap script that launches the framework. All requests that should be handled by this
  * framework should be redirected to this script via the web server daemon.
- * 
+ *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
 
@@ -27,6 +27,7 @@ spl_autoload_register(
       $file = str_replace('\\', '/', $class) . ".php";
       if(stream_resolve_include_path($file) !== false || is_file($file))
       {
+         /** @noinspection PhpIncludeInspection */
          require_once $file;
       }
       elseif(is_file(__DIR__ . "/$file"))

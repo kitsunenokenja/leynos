@@ -64,7 +64,7 @@ class TwigView extends TemplateView
     *
     * @param string $document_root
     */
-   protected function _initializeTwig(string $document_root)
+   protected function _initializeTwig(string $document_root): void
    {
       // Prepare the template engine
       $this->_Twig = new Twig_Environment(
@@ -81,7 +81,7 @@ class TwigView extends TemplateView
     *
     * @throws LogicException
     */
-   protected function _registerFunctions()
+   protected function _registerFunctions(): void
    {
       // Default behaviour is nothing. Custom extensions are to define this method if it is required.
    }
@@ -91,7 +91,7 @@ class TwigView extends TemplateView
     *
     * @throws LogicException
     */
-   protected function _registerFilters()
+   protected function _registerFilters(): void
    {
       // Default behaviour is nothing. Custom extensions are to define this method if it is required.
    }
@@ -115,7 +115,7 @@ class TwigView extends TemplateView
     *
     * @throws TemplateException Thrown if the Twig engine fails to render the template.
     */
-   final public function render(array $data = [])
+   final public function render(array $data = []): void
    {
       try
       {
