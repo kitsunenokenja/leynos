@@ -110,11 +110,12 @@ abstract class Config
    protected $_cache_namespace = "";
 
    /**
-    * Credentials for opening a DB connection.
+    * Credentials for opening DB connections. Keys of this array serve as aliases for each set of credentials. The key
+    * 'default' will be used for the shorthand alias in the controllers.
     *
-    * @var DBCredentials
+    * @var DBCredentials[]
     */
-   protected $_DBCredentials;
+   protected $_DBCredentials = [];
 
    /**
     * This array contains all the routing groups that define the application.
@@ -210,9 +211,9 @@ abstract class Config
    /**
     * Returns the DB credentials.
     *
-    * @return DBCredentials
+    * @return DBCredentials[]
     */
-   final public function getDBCredentials(): DBCredentials
+   final public function getDBCredentials(): array
    {
       return $this->_DBCredentials;
    }

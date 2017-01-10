@@ -95,8 +95,9 @@ class SampleConfiguration extends Config
          }
       ];
 
-      // DB credentials simply passes along the required parameters for PDO for opening a DB connection.
-      $this->_DBCredentials = new DBCredentials("host", "username", "password", "schema");
+      // DB credentials array contain a series of alias-keyed credentials objects. The shorthand alias in controllers
+      // corresponds to the key 'default' if defined.
+      $this->_DBCredentials = ['default' => new DBCredentials("host", "username", "password", "schema")];
 
       /*
        * The cache namespace serves as an automatic prefix for all keys for memory stores except for Session. This

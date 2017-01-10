@@ -11,10 +11,12 @@
 
 namespace kitsunenokenja\leynos\controller;
 
+use kitsunenokenja\leynos\config\DBCredentials;
 use kitsunenokenja\leynos\http\Headers;
 use kitsunenokenja\leynos\message\Message;
 use kitsunenokenja\leynos\view\PDFView;
 use PDO;
+use PDOException;
 
 /**
  * Controller
@@ -48,11 +50,19 @@ abstract class Controller
    protected $_Messages = [];
 
    /**
-    * Reference to DB provided by the environment.
+    * Internal copy of the credentials array. This is required for the lazy-loading of PDO connections for first-time
+    * references.
     *
-    * @var PDO
+    * @var DBCredentials[]
     */
-   protected $_DB;
+   protected $_DBCredentials = [];
+
+   /**
+    * References to databases persisted by the environment.
+    *
+    * @var PDO[]
+    */
+   protected $_Databases = [];
 
    /**
     * Reference to HTTP Headers provided by the environment. This allows controllers to contribute appropriate headers
@@ -119,7 +129,7 @@ abstract class Controller
     * @param string $key
     * @param mixed  $value
     */
-   public function addInput(string $key, $value): void
+   final public function addInput(string $key, $value): void
    {
       $this->_in[$key] = $value;
    }
@@ -129,7 +139,7 @@ abstract class Controller
     *
     * @return array
     */
-   public function getOutputs(): array
+   final public function getOutputs(): array
    {
       return $this->_out;
    }
@@ -139,19 +149,79 @@ abstract class Controller
     *
     * @return Message[]
     */
-   public function getMessages(): array
+   final public function getMessages(): array
    {
       return $this->_Messages;
    }
 
    /**
-    * Sets the reference to DB. Only the environment should pass this in when preparing to execute the controller.
+    * Returns the array of DB connections.
     *
-    * @param PDO $DB
+    * @return PDO[]
     */
-   public function setDB(PDO $DB = null): void
+   final public function getDatabases(): array
    {
-      $this->_DB = $DB;
+      return $this->_Databases;
+   }
+
+   /**
+    * Sets the array of DB connections.
+    *
+    * @param PDO[] $Databases
+    */
+   final public function setDatabases(array $Databases): void
+   {
+      $this->_Databases = $Databases;
+   }
+
+   /**
+    * Returns the DB connection of the requested alias. If the connection is not established, it will be opened first.
+    * This getter manages opening connections as needed as well as handling the default DB reference. Derivations should
+    * not access the PDO reference array directly.
+    *
+    * An exception is raised if the alias is undefined or the connection cannot be opened successfully.
+    *
+    * @param string $alias The alias whose DB connection to retrieve.
+    *
+    * @return PDO
+    *
+    * @throws PDOException Thrown if the DB connection could not be established or if the requested DB alias is invalid.
+    */
+   final protected function _getDB(string $alias = "default"): PDO
+   {
+      // If the connection is already available, return it immediately
+      if(!empty($this->_Databases[$alias]))
+      {
+         return $this->_Databases[$alias];
+      }
+      // If the connection is not available, but defined, open it then return it
+      elseif(!empty($this->_DBCredentials[$alias]))
+      {
+         $Cred = $this->_DBCredentials[$alias];
+
+         // TODO - Some PDO drivers deviate from the standard syntax; create a function that returns this string.
+         $this->_Databases[$alias] = new PDO(
+            "{$Cred->getDriver()}:host={$Cred->getHostname()};dbname={$Cred->getDatabaseSchema()}",
+            $Cred->getUsername(),
+            $Cred->getPassword()
+         );
+         $this->_Databases[$alias]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+         return $this->_Databases[$alias];
+      }
+
+      // Abort if the alias is not defined by the application configuration
+      throw new PDOException("Undefined DB alias requested.");
+   }
+
+   /**
+    * Sets the array of credentials. Only the environment should call this when the controller is being prepared.
+    *
+    * @param DBCredentials[] $DBCredentials
+    */
+   final public function setDBCredentials(array $DBCredentials): void
+   {
+      $this->_DBCredentials = $DBCredentials;
    }
 
    /**
@@ -160,7 +230,7 @@ abstract class Controller
     *
     * @param Headers $HTTPHeaders
     */
-   public function setHTTPHeaders(Headers $HTTPHeaders): void
+   final public function setHTTPHeaders(Headers $HTTPHeaders): void
    {
       $this->_HTTPHeaders = $HTTPHeaders;
    }
@@ -170,7 +240,7 @@ abstract class Controller
     *
     * @param string $document_root
     */
-   public function setDocumentRoot(string $document_root): void
+   final public function setDocumentRoot(string $document_root): void
    {
       $this->_document_root = $document_root;
    }
@@ -180,7 +250,7 @@ abstract class Controller
     *
     * @param string $accept_language
     */
-   public function setAcceptLanguage(string $accept_language): void
+   final public function setAcceptLanguage(string $accept_language): void
    {
       $this->_accept_language = $accept_language;
    }
@@ -190,7 +260,7 @@ abstract class Controller
     *
     * @return PDFView
     */
-   public function getPDFView(): ?PDFView
+   final public function getPDFView(): ?PDFView
    {
       return $this->_PDFView;
    }

@@ -123,11 +123,13 @@ class Kernel
    private $_MemStore;
 
    /**
-    * Reference to DB.
+    * References to databases. Controllers access databases via lazy-loading of PDO connections; when they do, PDO
+    * instances are filed here with the original credentials alias key preserved. These connections persist within the
+    * kernel so that subsequent controllers do not require reopening connections.
     *
-    * @var PDO
+    * @var PDO[]
     */
-   private $_DB;
+   private $_Databases = [];
 
    /**
     * Reference to the view renderer.
@@ -184,10 +186,6 @@ class Kernel
          // Try to derive the execution routing path from the request
          $Route = $this->_parseRouteRequest($this->_request_url);
 
-         // Open connection to DB for the controllers
-         if($this->_Config->getOptions()->getConnectDatabase())
-            $this->_connectDatabase();
-
          // Resume user session and close it for writing immediately to release the resource lock on the session
          $Session = new Session();
          $Session->close();
@@ -228,8 +226,9 @@ class Kernel
             $Controller->setDocumentRoot($this->_document_root);
             $Controller->setAcceptLanguage($this->_accept_language);
 
-            // Pass the DB reference to the controller. If the DB was not connected, this safely passes null.
-            $Controller->setDB($this->_DB);
+            // Pass the DB credentials and connections to the controller.
+            $Controller->setDBCredentials($this->_Config->getDBCredentials());
+            $Controller->setDatabases($this->_Databases);
 
             // Pass the HTTP Headers reference to the controller.
             $Controller->setHTTPHeaders($this->_HTTPHeaders);
@@ -251,6 +250,9 @@ class Kernel
             // Capture controller outputs and messages
             $data = array_merge($data, $Controller->getOutputs());
             $Messages = array_merge($Messages, $Controller->getMessages());
+
+            // Capture current DB connections for persistence
+            $this->_Databases = $Controller->getDatabases();
 
             // Only accept actual view instances to allow controllers that run after the one that actually outputs one
             // without clobbering it
@@ -526,22 +528,6 @@ class Kernel
       // Apply route overrides to options and return the route
       $this->_overrideOptions($Route->getOverrides());
       return $Route;
-   }
-
-   /**
-    * Opens a connection to the DB.
-    *
-    * @throws PDOException Thrown if the connection to DB fails.
-    */
-   private function _connectDatabase(): void
-   {
-      $Cred = $this->_Config->getDBCredentials();
-      $this->_DB = new PDO(
-         "{$Cred->getDriver()}:host={$Cred->getHostname()};dbname={$Cred->getDatabaseSchema()}",
-         $Cred->getUsername(),
-         $Cred->getPassword()
-      );
-      $this->_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    }
 
    /**

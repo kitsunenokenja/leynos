@@ -21,17 +21,8 @@ namespace kitsunenokenja\leynos\config;
  */
 class Options
 {
-   const CONNECT_DATABASE       = 0;
-   const SESSION_REQUIRED       = 1;
-   const ENABLE_TEMPLATE_ENGINE = 2;
-
-   /**
-    * Determines if a DB connection will be opened. Routes that do not need DB access should disable this option to
-    * refrain from creating an extraneous DB connection.
-    *
-    * @var bool
-    */
-   private $_connect_database = true;
+   const SESSION_REQUIRED       = 0;
+   const ENABLE_TEMPLATE_ENGINE = 1;
 
    /**
     * Determines if the current execution requires the user to be logged in with a valid session to proceed. Users not
@@ -58,26 +49,6 @@ class Options
     * @var bool
     */
    private $_enable_template_engine = false;
-
-   /**
-    * Returns the database connection flag.
-    *
-    * @return bool
-    */
-   public function getConnectDatabase(): bool
-   {
-      return $this->_connect_database;
-   }
-
-   /**
-    * Sets the database connection flag.
-    *
-    * @param bool $connect_database
-    */
-   public function setConnectDatabase(bool $connect_database): void
-   {
-      $this->_connect_database = $connect_database;
-   }
 
    /**
     * Returns the required session flag.
