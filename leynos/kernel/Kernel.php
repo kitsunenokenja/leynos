@@ -578,7 +578,6 @@ class Kernel
    private function _overrideOptions(array $overrides): void
    {
       $Options = $this->_Config->getOptions();
-      $Options->setConnectDatabase($overrides[Options::CONNECT_DATABASE] ?? $Options->getConnectDatabase());
       $Options->setSessionRequired($overrides[Options::SESSION_REQUIRED] ?? $Options->getSessionRequired());
       $Options->setEnableTemplateEngine($overrides[Options::ENABLE_TEMPLATE_ENGINE] ?? $Options->getEnableTemplateEngine());
    }

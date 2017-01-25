@@ -97,7 +97,12 @@ class SampleConfiguration extends Config
 
       // DB credentials array contain a series of alias-keyed credentials objects. The shorthand alias in controllers
       // corresponds to the key 'default' if defined.
-      $this->_DBCredentials = ['default' => new DBCredentials("host", "username", "password", "schema")];
+      $DefaultDB = new DBCredentials(DBCredentials::MYSQL);
+      $DefaultDB->setHostname("localhost");
+      $DefaultDB->setUsername("username");
+      $DefaultDB->setPassword("password");
+      $DefaultDB->setDatabaseSchema("schema");
+      $this->_DBCredentials = ['default' => $DefaultDB];
 
       /*
        * The cache namespace serves as an automatic prefix for all keys for memory stores except for Session. This

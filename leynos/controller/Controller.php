@@ -199,9 +199,8 @@ abstract class Controller
       {
          $Cred = $this->_DBCredentials[$alias];
 
-         // TODO - Some PDO drivers deviate from the standard syntax; create a function that returns this string.
          $this->_Databases[$alias] = new PDO(
-            "{$Cred->getDriver()}:host={$Cred->getHostname()};dbname={$Cred->getDatabaseSchema()}",
+            $Cred->getDSN(),
             $Cred->getUsername(),
             $Cred->getPassword()
          );
