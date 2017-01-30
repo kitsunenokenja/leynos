@@ -251,44 +251,95 @@ class DBCredentials
             return "{$dsn}dbname={$this->_database_schema}";
             break;
 
-         // TODO - Complete DSN generation for other PDO drivers.
          case self::DB2:
+            if(empty($this->_database_schema))
+               throw new UnexpectedValueException("Missing DB name for DB2 driver.");
+
+            $dsn = "ibm:HOSTNAME={$this->_hostname};";
+
+            if(!empty($this->_port))
+               $dsn .= "PORT={$this->_port};";
+
+            return "{$dsn}DATABASE={$this->_database_schema};PROTOCOL=TCPIP";
             break;
 
          case self::FIREBIRD:
+            if(empty($this->_path))
+               throw new UnexpectedValueException("Missing path for Firebird driver.");
+
+            // Path-only syntax
+            if(empty($this->_hostname))
+               return "firebird:dbname={$this->_path}";
+
+            // Host & path syntax
+            $dsn = "firebird:dbname={$this->_hostname}";
+
+            if(!empty($this->_port))
+               $dsn .= "/{$this->_port}";
+
+            return "$dsn:{$this->_path}";
             break;
 
          case self::INFORMIX:
+            return "informix:host={$this->_hostname}; service=9800; database={$this->_database_schema}; " .
+               "server=ids_server; protocol=onsoctcp; EnableScrollableCursors=1";
             break;
 
          case self::MYSQL:
+            if(empty($this->_database_schema))
+               throw new UnexpectedValueException("Missing DB name for MySQL/MariaDB driver.");
+
+            $dsn = "mysql:host={$this->_hostname};";
+
+            if(!empty($this->_port))
+               $dsn .= "port={$this->_port};";
+
+            return "{$dsn}dbname={$this->_database_schema}";
             break;
 
          case self::ODBC:
+            return "odbc:{$this->_database_schema}";
             break;
 
          case self::ORACLE:
+            if(empty($this->_hostname))
+               return "oci:dbname={$this->_database_schema}";
+
+            return "oci:dbname=//{$this->_hostname}:{$this->_port}/{$this->_database_schema}";
             break;
 
          case self::POSTGRES:
+            return "pgsql:host={$this->_hostname};port={$this->_port};dbname={$this->_database_schema}";
             break;
 
          case self::SQLITE:
+            // For memory SQLite DBs, the :memory: string can be assigned to the path intentionally
+            return "sqlite:{$this->_path}";
             break;
 
          case self::PDO_4D:
+            $dsn = "4D:host={$this->_hostname}";
+
+            if(!empty($this->_port))
+               $dsn .= ";port={$this->_port}";
+
+            return $dsn;
             break;
 
          case self::DBLIB:
+            return "dblib:host={$this->_hostname};dbname={$this->_database_schema}";
             break;
 
          case self::MSSQL:
+            return "mssql:host={$this->_hostname};dbname={$this->_database_schema}";
             break;
 
          case self::SQLDRV:
+            return "sqlsrv:Server={$this->_hostname};Database={$this->_database_schema}";
             break;
 
          case self::SYBASE:
+            return "sybase:host={$this->_hostname};dbname={$this->_database_schema}";
             break;
       }
 
