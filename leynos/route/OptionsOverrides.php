@@ -40,16 +40,6 @@ trait OptionsOverrides
    }
 
    /**
-    * Sets the override for the database connection option.
-    *
-    * @param bool $setting
-    */
-   public function setConnectDatabase(bool $setting): void
-   {
-      $this->_overrides[Options::CONNECT_DATABASE] = $setting;
-   }
-
-   /**
     * Sets the override for the session required option.
     *
     * @param bool $setting

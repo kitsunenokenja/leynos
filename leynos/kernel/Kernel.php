@@ -227,7 +227,7 @@ class Kernel
             $Controller->setAcceptLanguage($this->_accept_language);
 
             // Pass the DB credentials and connections to the controller.
-            $Controller->setDBCredentials($this->_Config->getDBCredentials());
+            $Controller->setPDOSettings($this->_Config->getPDOSettings());
             $Controller->setDatabases($this->_Databases);
 
             // Pass the HTTP Headers reference to the controller.

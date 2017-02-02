@@ -11,7 +11,7 @@
 
 namespace kitsunenokenja\leynos\controller;
 
-use kitsunenokenja\leynos\config\DBCredentials;
+use kitsunenokenja\leynos\config\PDOSettings;
 use kitsunenokenja\leynos\http\Headers;
 use kitsunenokenja\leynos\message\Message;
 use kitsunenokenja\leynos\view\PDFView;
@@ -50,12 +50,12 @@ abstract class Controller
    protected $_Messages = [];
 
    /**
-    * Internal copy of the credentials array. This is required for the lazy-loading of PDO connections for first-time
+    * Internal copy of the settings array. This is required for the lazy-loading of PDO connections for first-time
     * references.
     *
-    * @var DBCredentials[]
+    * @var PDOSettings[]
     */
-   protected $_DBCredentials = [];
+   protected $_PDOSettings = [];
 
    /**
     * References to databases persisted by the environment.
@@ -195,17 +195,9 @@ abstract class Controller
          return $this->_Databases[$alias];
       }
       // If the connection is not available, but defined, open it then return it
-      elseif(!empty($this->_DBCredentials[$alias]))
+      elseif(!empty($this->_PDOSettings[$alias]))
       {
-         $Cred = $this->_DBCredentials[$alias];
-
-         $this->_Databases[$alias] = new PDO(
-            $Cred->getDSN(),
-            $Cred->getUsername(),
-            $Cred->getPassword()
-         );
-         $this->_Databases[$alias]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+         $this->_Databases[$alias] = $this->_PDOSettings[$alias]->getPDO();
          return $this->_Databases[$alias];
       }
 
@@ -214,13 +206,13 @@ abstract class Controller
    }
 
    /**
-    * Sets the array of credentials. Only the environment should call this when the controller is being prepared.
+    * Sets the array of PDO settings. Only the environment should call this when the controller is being prepared.
     *
-    * @param DBCredentials[] $DBCredentials
+    * @param PDOSettings[] $PDOSettings
     */
-   final public function setDBCredentials(array $DBCredentials): void
+   final public function setPDOSettings(array $PDOSettings): void
    {
-      $this->_DBCredentials = $DBCredentials;
+      $this->_PDOSettings = $PDOSettings;
    }
 
    /**

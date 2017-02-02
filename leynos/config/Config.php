@@ -110,12 +110,12 @@ abstract class Config
    protected $_cache_namespace = "";
 
    /**
-    * Credentials for opening DB connections. Keys of this array serve as aliases for each set of credentials. The key
+    * Settings for opening DB connections. Keys of this array serve as aliases for each set of settings. The key
     * 'default' will be used for the shorthand alias in the controllers.
     *
-    * @var DBCredentials[]
+    * @var PDOSettings[]
     */
-   protected $_DBCredentials = [];
+   protected $_PDOSettings = [];
 
    /**
     * This array contains all the routing groups that define the application.
@@ -209,13 +209,13 @@ abstract class Config
    }
 
    /**
-    * Returns the DB credentials.
+    * Returns the PDO settings.
     *
-    * @return DBCredentials[]
+    * @return PDOSettings[]
     */
-   final public function getDBCredentials(): array
+   final public function getPDOSettings(): array
    {
-      return $this->_DBCredentials;
+      return $this->_PDOSettings;
    }
 
    /**
