@@ -60,7 +60,6 @@ class Headers
    {
       header(self::VERSION . "303 See Other");
       header("Location: $redirect_url");
-      exit;
    }
 
    /**

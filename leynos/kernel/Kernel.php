@@ -229,8 +229,7 @@ class Kernel
          // Process the execution path dictated by the route by iterating through its controller list
          $data = [];
          $this->_Messages = $this->_Session->getKey("_Messages") ?? [];
-         $success = true;
-         $this->_executeControllers($Route, $data);
+         $status = $this->_executeControllers($Route, $data);
 
          // Save controller-generated messages. This stack will continue to accumulate until an HTML view is served.
          if($this->_Messages !== [])
@@ -239,60 +238,8 @@ class Kernel
             $this->_Session->setKey("_Messages", $this->_Messages);
          }
 
-         // Check for redirects prior to defaulting to rendering a view
-         if($success && $Route->getRedirectRoute() !== null)
-            $this->_HTTPHeaders->redirect($Route->getRedirectRoute());
-
-         if(!$success && $Route->getFailureRoute() !== null)
-            $this->_HTTPHeaders->redirect($Route->getFailureRoute());
-
-         // Check for failure without redirects
-         if(!$success)
-            throw new ControllerFailureException($data['error'] ?? "Kernel: Unknown failure.");
-
-         // Initialise the view engine with respect to the response mode
-         switch($this->_response_mode)
-         {
-            case "HTML":
-            default:
-               // Flush messages
-               if(!empty($this->_Session->getKey("_Messages")))
-               {
-                  $this->_Session->open();
-                  $this->_Session->setKey("_Messages", null);
-               }
-               $data['_messages'] = [];
-               foreach($this->_Messages as $Message)
-                  $data['_messages'][] = $Message->jsonSerialize();
-
-               // Make user permissions available in the view for content filtering & control
-               $data['_permissions'] = $this->_permissions;
-
-               // Prepare the view with the template to be rendered
-               $View = $this->_Config->getTemplateEngine($this->_document_root);
-               $View->setTemplate($Route->getTemplate());
-               $this->_View = $View;
-               break;
-            case "JSON":
-               $this->_View = new JSONView();
-               $this->_HTTPHeaders->contentType(HTTPHeaders::JSON);
-               break;
-
-            // TODO - Update these cases when the generalised Spout library wrapper is completed for Leynos integration.
-            case "CSV":
-            case "ODS":
-            case "XLSX":
-               break;
-
-            case "PDF":
-               if(!$this->_View instanceof PDFView)
-                  throw new Exception("PDF view requested without a PDF view to render.");
-
-               $this->_HTTPHeaders->contentType(HTTPHeaders::PDF);
-               $this->_HTTPHeaders->contentDisposition("{$this->_View->getFileName()}.pdf", true);
-               break;
-         }
-         $this->_View->render($data);
+         // Respond via view
+         $this->_renderView($Route, $status, $data);
       }
       // Respond to bad route requests with a 404
       catch(RoutingException $E)
@@ -560,6 +507,80 @@ class Kernel
       }
 
       return true;
+   }
+
+   /**
+    * Conclude the execution with a response based on the view to use.
+    *
+    * @param Route $Route  The route whose view to render.
+    * @param bool  $status The success state from the controller execution loop.
+    * @param array $data   Accumulation of data for the view to consume.
+    *
+    * @throws ControllerFailureException Thrown if a controller loop fails without redirection handling.
+    * @throws Exception                  General failure for inappropriate attempts to render binary views.
+    */
+   private function _renderView(Route $Route, bool $status, array $data): void
+   {
+      // Check for redirects prior to defaulting to rendering a view
+      if($status && $Route->getRedirectRoute() !== null)
+      {
+         $this->_HTTPHeaders->redirect($Route->getRedirectRoute());
+         return;
+      }
+
+      if(!$status && $Route->getFailureRoute() !== null)
+      {
+         $this->_HTTPHeaders->redirect($Route->getFailureRoute());
+         return;
+      }
+
+      // Check for failure without redirects
+      if(!$status)
+         throw new ControllerFailureException($data['error'] ?? "Kernel: Unknown failure.");
+
+      // Initialise the view engine with respect to the response mode
+      switch($this->_response_mode)
+      {
+         case "HTML":
+         default:
+            // Flush messages
+            if(!empty($this->_Session->getKey("_Messages")))
+            {
+               $this->_Session->open();
+               $this->_Session->setKey("_Messages", null);
+            }
+            $data['_messages'] = [];
+            foreach($this->_Messages as $Message)
+               $data['_messages'][] = $Message->jsonSerialize();
+
+            // Make user permissions available in the view for content filtering & control
+            $data['_permissions'] = $this->_permissions;
+
+            // Prepare the view with the template to be rendered
+            $View = $this->_Config->getTemplateEngine($this->_document_root);
+            $View->setTemplate($Route->getTemplate());
+            $this->_View = $View;
+            break;
+         case "JSON":
+            $this->_View = new JSONView();
+            $this->_HTTPHeaders->contentType(HTTPHeaders::JSON);
+            break;
+
+         // TODO - Update these cases when the generalised Spout library wrapper is completed for Leynos integration.
+         case "CSV":
+         case "ODS":
+         case "XLSX":
+            break;
+
+         case "PDF":
+            if(!$this->_View instanceof PDFView)
+               throw new Exception("PDF view requested without a PDF view to render.");
+
+            $this->_HTTPHeaders->contentType(HTTPHeaders::PDF);
+            $this->_HTTPHeaders->contentDisposition("{$this->_View->getFileName()}.pdf", true);
+            break;
+      }
+      $this->_View->render($data);
    }
 
    /**
