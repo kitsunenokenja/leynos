@@ -245,54 +245,28 @@ class Kernel
       catch(RoutingException $E)
       {
          $this->_HTTPHeaders->notFound();
-         $this->_renderError("The requested document could not be found.");
+         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
+         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $this->_renderView($Route, true, $data);
       }
-      // Valid but unauthorised requests
+      // Valid but unauthorised requests respond with a 403
       catch(UnauthorizedActionException $E)
       {
          $this->_HTTPHeaders->forbidden();
-         $this->_renderError("Permission denied.");
+         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
+         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $this->_renderView($Route, true, $data);
       }
-      // Respond to controller failures
-      catch(ControllerFailureException $E)
-      {
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError($E->getMessage());
-      }
-      // Template engine failure
-      catch(TemplateException $E)
-      {
-         trigger_error($E->getMessage(), E_USER_WARNING);
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Template failure.");
-      }
-      // Spreadsheet export failure
-      catch(SpreadsheetException $E)
-      {
-         trigger_error($E->getMessage(), E_USER_WARNING);
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Export failure.");
-      }
-      // DB failure
-      catch(PDOException $E)
-      {
-         trigger_error($E->getMessage(), E_USER_WARNING);
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Database communication error.");
-      }
-      // Memory store failures
-      catch(MemoryStoreException $E)
-      {
-         trigger_error($E->getMessage(), E_USER_WARNING);
-         $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Internal server error.");
-      }
-      // All unhandled exceptions will return as a server fault
+      // All other failures result in 500
       catch(Exception | Error $E)
       {
+         // Register the failure in the log
          trigger_error($E->getMessage(), E_USER_WARNING);
+
          $this->_HTTPHeaders->internalServerError();
-         $this->_renderError("Internal server error.");
+         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
+         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $this->_renderView($Route, true, $data);
       }
    }
 
@@ -581,46 +555,6 @@ class Kernel
             break;
       }
       $this->_View->render($data);
-   }
-
-   /**
-    * This method is for responding upon exception catching by rendering an error message.
-    *
-    * @param string $message
-    *
-    * TODO - Replace this method's behaviour entirely. This approach is not localisation friendly and requires a
-    * predetermined template to be defined, even if it wasn't hard-coded here. Replacing this with a proper solution
-    * will likely be a last-effort reroute which will die with plain text if it still can't succeed, avoiding infinite
-    * redirects to itself.
-    */
-   private function _renderError(string $message): void
-   {
-      try
-      {
-         switch($this->_response_mode)
-         {
-            case "HTML":
-            default:
-               $View = $this->_Config->getTemplateEngine($this->_document_root);
-               // This declaration could be configurable, but because this entire method needs to be refined completely,
-               // factoring this out has no long-term merit.
-               $View->setTemplate("error.twig");
-               $this->_View = $View;
-               break;
-            case "JSON":
-               $this->_View = new JSONView();
-               break;
-         }
-         $this->_View->render(['error' => $message]);
-      }
-      catch(Exception $E)
-      {
-         die("Internal server error.");
-      }
-      catch(Error $E)
-      {
-         die("Internal server error.");
-      }
    }
 
    /**

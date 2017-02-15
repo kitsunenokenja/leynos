@@ -82,6 +82,19 @@ abstract class Config
    protected $_routing_pattern = '#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#';
 
    /**
+    * The error route for re-routing to handle internal failures. This should be a defined route as the default fallback
+    * for errors or failures otherwise not handled. This route must be a definitive execution path that cannot throw
+    * exceptions to ensure sane responses. An error route that raises yet another exception will bubble up unhandled
+    * intentionally as the framework's way to indicate misconfiguration.
+    *
+    * The exception that triggers re-routing to this error route will be supplied as input to facilitate customised
+    * responses based on the nature of the failure that occurred.
+    *
+    * @var string
+    */
+   protected $_error_route = "/error/error";
+
+   /**
     * Class name of the memory store implementation for the framework to use. The default is Redis to ensure a sane
     * default configuration.
     *
@@ -172,6 +185,16 @@ abstract class Config
    final public function getRoutingPattern(): string
    {
       return $this->_routing_pattern;
+   }
+
+   /**
+    * Returns the error route string.
+    *
+    * @return string
+    */
+   final public function getErrorRoute(): string
+   {
+      return $this->_error_route;
    }
 
    /**
