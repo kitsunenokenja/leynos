@@ -14,6 +14,7 @@ namespace kitsunenokenja\leynos\view;
 // The FPDF library is not under any namespace. This wrapper assumes the class definition will be modified to force a
 // namespace declaration for it.
 use fpdf\FPDF;
+use kitsunenokenja\leynos\http\Headers;
 
 /**
  * FPDFView
@@ -22,7 +23,7 @@ use fpdf\FPDF;
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-class FPDFView implements PDFView
+class FPDFView implements BinaryView
 {
    /**
     * Reference to the FPDF object containing the output in its buffer.
@@ -32,7 +33,7 @@ class FPDFView implements PDFView
    private $_FPDF;
 
    /**
-    * Name of the file to output.
+    * The file name for output.
     *
     * @var string
     */
@@ -64,5 +65,13 @@ class FPDFView implements PDFView
    public function getFileName(): string
    {
       return $this->_file_name;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getMIMEType(): string
+   {
+      return Headers::PDF;
    }
 }

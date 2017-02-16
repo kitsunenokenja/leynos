@@ -17,12 +17,11 @@ use kitsunenokenja\leynos\config\{Config, Options};
 use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException};
 use kitsunenokenja\leynos\file_system\PostFile;
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
-use kitsunenokenja\leynos\memory_store\{MemoryStore, MemoryStoreException, Session};
+use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
 use kitsunenokenja\leynos\message\Message;
 use kitsunenokenja\leynos\route\{Group, Route, RoutingException};
-use kitsunenokenja\leynos\view\{JSONView, PDFView, SpreadsheetException, TemplateException, TemplateView, View};
+use kitsunenokenja\leynos\view\{BinaryView, JSONView, TemplateView, View};
 use PDO;
-use PDOException;
 
 /**
  * Kernel
@@ -472,8 +471,8 @@ class Kernel
 
          // Only accept actual view instances to allow controllers that run after the one that actually outputs one
          // without clobbering it
-         if($Controller->getPDFView() !== null)
-            $this->_View = $Controller->getPDFView();
+         if($Controller->getBinaryView() !== null)
+            $this->_View = $Controller->getBinaryView();
 
          // End execution if the controller failed
          if(!$success)
@@ -540,18 +539,15 @@ class Kernel
             $this->_HTTPHeaders->contentType(HTTPHeaders::JSON);
             break;
 
-         // TODO - Update these cases when the generalised Spout library wrapper is completed for Leynos integration.
          case "CSV":
          case "ODS":
          case "XLSX":
-            break;
-
          case "PDF":
-            if(!$this->_View instanceof PDFView)
-               throw new Exception("PDF view requested without a PDF view to render.");
+            if(!$this->_View instanceof BinaryView)
+               throw new Exception("Binary view requested but no rendering view was provided.");
 
-            $this->_HTTPHeaders->contentType(HTTPHeaders::PDF);
-            $this->_HTTPHeaders->contentDisposition("{$this->_View->getFileName()}.pdf", true);
+            $this->_HTTPHeaders->contentType($this->_View->getMIMEType());
+            $this->_HTTPHeaders->contentDisposition($this->_View->getFileName(), true);
             break;
       }
       $this->_View->render($data);

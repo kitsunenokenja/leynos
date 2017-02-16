@@ -14,7 +14,7 @@ namespace kitsunenokenja\leynos\controller;
 use kitsunenokenja\leynos\config\PDOSettings;
 use kitsunenokenja\leynos\http\Headers;
 use kitsunenokenja\leynos\message\Message;
-use kitsunenokenja\leynos\view\PDFView;
+use kitsunenokenja\leynos\view\BinaryView;
 use PDO;
 use PDOException;
 
@@ -92,12 +92,12 @@ abstract class Controller
    protected $_accept_language;
 
    /**
-    * An instance of a view for facilitating PDF output. This member bridges the gap between the controller's task of
-    * preparing PDF output data, and the framework having a data set handed off to push to the client.
+    * An instance of a view for facilitating binary output. This member bridges the gap between the controller's task of
+    * preparing output data, and the framework having a data set handed off to push to the client.
     *
-    * @var PDFView
+    * @var BinaryView
     */
-   protected $_PDFView;
+   protected $_BinaryView;
 
    /**
     * Magic get that wraps access to the _in array.
@@ -247,13 +247,13 @@ abstract class Controller
    }
 
    /**
-    * Returns the view instance for PDF output.
+    * Returns the view instance for binary output.
     *
-    * @return PDFView
+    * @return BinaryView
     */
-   final public function getPDFView(): ?PDFView
+   final public function getBinaryView(): ?BinaryView
    {
-      return $this->_PDFView;
+      return $this->_BinaryView;
    }
 
    /**
