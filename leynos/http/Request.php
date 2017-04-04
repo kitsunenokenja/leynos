@@ -52,17 +52,18 @@ class Request
       $this->_group = $group;
       $this->_route = $route;
 
-      // Clean up all inbound array keys
-      $this->_sanitizeKeys($_REQUEST);
+      // Copy the request contents to internal storage. Although the super-global would always exist, subsequent calls
+      // to this routine will have it unset due to internal re-routing triggering this process again.
+      $this->_data = $_REQUEST ?? [];
 
-      // Copy array to the class
-      $this->_data = $_REQUEST;
+      // Free memory now. These super-globals aren't needed hereafter, and this avoids duplicating request in memory.
+      unset($_GET, $_POST, $_REQUEST);
+
+      // Clean up all inbound array keys
+      $this->_sanitizeKeys($this->_data);
 
       // Clean up the values
       $this->_sanitizeValues($this->_data);
-
-      // Free memory
-      unset($_GET, $_POST, $_REQUEST);
    }
 
    /**
