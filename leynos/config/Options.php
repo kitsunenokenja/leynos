@@ -23,6 +23,7 @@ class Options
 {
    const SESSION_REQUIRED       = 0;
    const ENABLE_TEMPLATE_ENGINE = 1;
+   const ENABLE_ROUTING_CACHE   = 2;
 
    /**
     * Determines if the current execution requires the user to be logged in with a valid session to proceed. Users not
@@ -49,6 +50,15 @@ class Options
     * @var bool
     */
    private $_enable_template_engine = false;
+
+   /**
+    * Determines whether the framework will use the memory store to cache routing group configurations. Generally this
+    * should remain enabled for best performance. Disabling this option is ideal for development and testing
+    * environments which would otherwise require constant cache flushing without this off.
+    *
+    * @var bool
+    */
+   private $_enable_routing_cache = true;
 
    /**
     * Returns the required session flag.
@@ -108,5 +118,25 @@ class Options
    public function setEnableTemplateEngine(bool $enable_template_engine): void
    {
       $this->_enable_template_engine = $enable_template_engine;
+   }
+
+   /**
+    * Returns the enable routing cache flag.
+    *
+    * @return bool
+    */
+   public function getEnableRoutingCache(): bool
+   {
+      return $this->_enable_routing_cache;
+   }
+
+   /**
+    * Sets the enable routing cache flag.
+    *
+    * @param bool $enable_routing_cache
+    */
+   public function setEnableRoutingCache(bool $enable_routing_cache): void
+   {
+      $this->_enable_routing_cache = $enable_routing_cache;
    }
 }

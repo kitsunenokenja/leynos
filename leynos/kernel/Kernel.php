@@ -400,10 +400,17 @@ class Kernel
       }
 
       // Check cache for the route group definition
-      if(($this->_Group = $this->_MemStore->getKey("route_group_cache:$group")) === null)
+      if($this->_Config->getOptions()->getEnableRoutingCache())
+      {
+         if(($this->_Group = $this->_MemStore->getKey("route_group_cache:$group")) === null)
+         {
+            $this->_Group = new $group();
+            $this->_MemStore->setKey("route_group_cache:$group", $this->_Group);
+         }
+      }
+      else
       {
          $this->_Group = new $group();
-         $this->_MemStore->setKey("route_group_cache:$group", $this->_Group);
       }
 
       // Apply group overrides to options
@@ -562,6 +569,9 @@ class Kernel
    {
       $Options = $this->_Config->getOptions();
       $Options->setSessionRequired($overrides[Options::SESSION_REQUIRED] ?? $Options->getSessionRequired());
-      $Options->setEnableTemplateEngine($overrides[Options::ENABLE_TEMPLATE_ENGINE] ?? $Options->getEnableTemplateEngine());
+      $Options->setEnableTemplateEngine(
+         $overrides[Options::ENABLE_TEMPLATE_ENGINE] ?? $Options->getEnableTemplateEngine()
+      );
+      $Options->setEnableRoutingCache($overrides[Options::ENABLE_ROUTING_CACHE] ?? $Options->getEnableRoutingCache());
    }
 }
