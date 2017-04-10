@@ -21,6 +21,11 @@ namespace kitsunenokenja\leynos\memory_store;
  */
 abstract class MemoryStore
 {
+   // For routing group configuration usage
+   const SESSION      = 0;
+   const LOCAL_STORE  = 1;
+   const GLOBAL_STORE = 2;
+
    /**
     * String token to use as the namespace for keys.
     *

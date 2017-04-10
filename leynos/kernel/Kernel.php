@@ -462,6 +462,23 @@ class Kernel
          $Controller->addInput("MemStore", $this->_MemStore);
          $Controller->addInput("TemplateEngine", $this->_TemplateEngine);
 
+         // Supply memory store values based on the provided mapping
+         foreach($Route->getStoreInputsMap()[MemoryStore::SESSION] as $store_key)
+         {
+            $Controller->addInput($store_key, $this->_Session->getKey($store_key));
+         }
+         foreach($Route->getStoreInputsMap()[MemoryStore::GLOBAL_STORE] as $store_key)
+         {
+            $Controller->addInput($store_key, $this->_MemStore->getKey($store_key));
+         }
+         foreach($Route->getStoreInputsMap()[MemoryStore::LOCAL_STORE] as $store_key)
+         {
+            $Controller->addInput(
+               $store_key,
+               $this->_MemStore->getKey($this->_Config->getUserStoreNamespace() . $store_key)
+            );
+         }
+
          // Pass a reference to the data array. This allows chaining outputs from previous controllers as input
          // to another.
          $Controller->addInput("_data", $data);

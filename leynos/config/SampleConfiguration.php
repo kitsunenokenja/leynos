@@ -120,4 +120,14 @@ class SampleConfiguration extends Config
        */
       return $Session->getKey("is_authenticated") === true;
    }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function setUserStoreNamespace(Session $Session): void
+   {
+      // In the same manner as the authenticated method, any arbitrary data and logic can be applied to resolve the
+      // value for the user store namespace prefix.
+      $this->_user_store_namespace = (string) $Session->getKey("user_id");
+   }
 }

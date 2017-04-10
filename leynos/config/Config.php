@@ -123,6 +123,18 @@ abstract class Config
    protected $_cache_namespace = "";
 
    /**
+    * The string token to use as the namespace for user-exclusive keys in the memory store. This allows safe storage of
+    * values specific to a user in the general memory store, without being accessible to other users, without polluting
+    * session space with those values.
+    *
+    * If this remains an empty string, then there will be no difference between user and global access to the memory
+    * store for keys.
+    *
+    * @var string
+    */
+   protected $_user_store_namespace = "";
+
+   /**
     * Settings for opening DB connections. Keys of this array serve as aliases for each set of settings. The key
     * 'default' will be used for the shorthand alias in the controllers.
     *
@@ -232,6 +244,16 @@ abstract class Config
    }
 
    /**
+    * Returns the user store namespace.
+    *
+    * @return string
+    */
+   final public function getUserStoreNamespace(): string
+   {
+      return $this->_user_store_namespace;
+   }
+
+   /**
     * Returns the PDO settings.
     *
     * @return PDOSettings[]
@@ -261,4 +283,13 @@ abstract class Config
     * @return bool
     */
    abstract public function isAuthenticated(Session $Session): bool;
+
+   /**
+    * Determine a user store namespace using arbitrary data from the session store and set that namespace accordingly.
+    * A typical definition of this method would retrieve a unique identifier from session and use it as the namespace
+    * prefix.
+    *
+    * @param Session $Session
+    */
+   abstract public function setUserStoreNamespace(Session $Session): void;
 }

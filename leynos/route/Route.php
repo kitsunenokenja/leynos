@@ -12,6 +12,7 @@
 namespace kitsunenokenja\leynos\route;
 
 use kitsunenokenja\leynos\config\Options;
+use kitsunenokenja\leynos\memory_store\MemoryStore;
 
 /**
  * Route
@@ -48,6 +49,17 @@ class Route
     * @var array
     */
    private $_inputs = [];
+
+   /**
+    * Any symbolic keys for each store whose values to prepare as proper inputs.
+    *
+    * @var string[][]
+    */
+   private $_store_inputs_map = [
+      MemoryStore::SESSION      => [],
+      MemoryStore::LOCAL_STORE  => [],
+      MemoryStore::GLOBAL_STORE => []
+   ];
 
    /**
     * The sequence of controllers to execute.
@@ -159,6 +171,27 @@ class Route
    public function addInput(string $key, $value): void
    {
       $this->_inputs[$key] = $value;
+   }
+
+   /**
+    * Returns the store inputs map.
+    *
+    * @return string[][]
+    */
+   public function getStoreInputsMap(): array
+   {
+      return $this->_store_inputs_map;
+   }
+
+   /**
+    * Adds a key by its corresponding memory store to an internal map for the kernel to process and supply values.
+    *
+    * @param int    $store The store where to query the key.
+    * @param string $key   The key whose value should be provided as an input.
+    */
+   public function addStoreInput(int $store, string $key): void
+   {
+      $this->_store_inputs_map[$store][] = $key;
    }
 
    /**
