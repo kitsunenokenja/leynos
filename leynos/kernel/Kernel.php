@@ -197,12 +197,12 @@ class Kernel
          $this->_MemStore = $this->_Config->getMemoryStore();
          $this->_MemStore->setNamespace($this->_Config->getCacheNamespace());
 
-         // Try to derive the execution routing path from the request
-         $Route = $this->_parseRouteRequest($this->_request_url);
-
          // Resume user session and close it for writing immediately to release the resource lock on the session
          $this->_Session = new Session();
          $this->_Session->close();
+
+         // Try to derive the execution routing path from the request
+         $Route = $this->_parseRouteRequest($this->_request_url);
 
          // If session is required then a valid login must be present
          if($this->_Config->getOptions()->getSessionRequired() && !$this->_Config->isAuthenticated($this->_Session))
