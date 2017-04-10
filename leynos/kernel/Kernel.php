@@ -245,7 +245,8 @@ class Kernel
       {
          $this->_HTTPHeaders->notFound();
          $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $data = ['Error' => $E];
+         $this->_executeControllers($Route, $data);
          $this->_renderView($Route, true, $data);
       }
       // Valid but unauthorised requests respond with a 403
@@ -253,7 +254,8 @@ class Kernel
       {
          $this->_HTTPHeaders->forbidden();
          $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $data = ['Error' => $E];
+         $this->_executeControllers($Route, $data);
          $this->_renderView($Route, true, $data);
       }
       // All other failures result in 500
@@ -264,7 +266,8 @@ class Kernel
 
          $this->_HTTPHeaders->internalServerError();
          $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $this->_executeControllers($Route, $data = ['Error' => $E]);
+         $data = ['Error' => $E];
+         $this->_executeControllers($Route, $data);
          $this->_renderView($Route, true, $data);
       }
    }
