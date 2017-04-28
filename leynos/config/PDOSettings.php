@@ -53,6 +53,13 @@ class PDOSettings
    private $_options;
 
    /**
+    * Attribute/value pairs to be applied to the PDO instance.
+    *
+    * @var array
+    */
+   private $_attributes = [];
+
+   /**
     * Creates a PDO settings object storing the parameters for PDO for later use.
     *
     * @param string $dsn      Data source name connection string for PDO.
@@ -80,7 +87,26 @@ class PDOSettings
    public function getPDO(): PDO
    {
       $PDO = new PDO($this->_dsn, $this->_username, $this->_password, $this->_options);
+
+      // Exception-based error mode is the framework default
       $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      // Apply configuration-supplied attribute options. By doing this after the default error mode setting above, the
+      // configuration is able to override which error mode to use.
+      foreach($this->_attributes as $attribute => $value)
+         $PDO->setAttribute($attribute, $value);
+
       return $PDO;
+   }
+
+   /**
+    * Store attribute/value pairs to be applied to the PDO instance.
+    *
+    * @param int   $attribute
+    * @param mixed $value
+    */
+   public function setAttribute(int $attribute, $value): void
+   {
+      $this->_attributes[$attribute] = $value;
    }
 }
