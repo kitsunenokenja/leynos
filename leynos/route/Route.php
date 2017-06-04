@@ -56,6 +56,7 @@ class Route
     * @var string[][]
     */
    private $_store_inputs_map = [
+      MemoryStore::REQUEST      => [],
       MemoryStore::SESSION      => [],
       MemoryStore::LOCAL_STORE  => [],
       MemoryStore::GLOBAL_STORE => []

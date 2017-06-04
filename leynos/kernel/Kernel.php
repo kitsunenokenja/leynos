@@ -466,6 +466,10 @@ class Kernel
          $Controller->addInput("TemplateEngine", $this->_TemplateEngine);
 
          // Supply memory store values based on the provided mapping
+         foreach($Route->getStoreInputsMap()[MemoryStore::REQUEST] as $store_key)
+         {
+            $Controller->addInput($store_key, $this->_Request->__get($store_key));
+         }
          foreach($Route->getStoreInputsMap()[MemoryStore::SESSION] as $store_key)
          {
             $Controller->addInput($store_key, $this->_Session->getKey($store_key));
