@@ -39,7 +39,7 @@ class Redis extends MemoryStore
    }
 
    /**
-    * {@inheritdoc
+    * {@inheritdoc}
     *
     * @throws MemoryStoreException Thrown upon memory store I/O failure.
     */
