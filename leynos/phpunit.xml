@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2017.
+  ~
+  ~ This file belongs to the Leynos project, an open-source project distributed
+  ~ under the GPL license. This license is included as part of the project and
+  ~ is also available at the following web page:
+  ~
+  ~ http://www.gnu.org/licenses/gpl.html
+  -->
+<phpunit
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
+   bootstrap="tests/bootstrap.php"
+   convertErrorsToExceptions="true"
+   convertNoticesToExceptions="true"
+   convertWarningsToExceptions="true"
+   backupGlobals="true">
+   <testsuites>
+      <testsuite>
+         <directory>tests</directory>
+         <exclude>
+            <file>tests/bootstrap.php</file>
+            <directory>tests/mocks</directory>
+         </exclude>
+      </testsuite>
+   </testsuites>
+</phpunit>
