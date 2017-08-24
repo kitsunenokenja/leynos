@@ -92,13 +92,6 @@ class Route
    private $_permission_token;
 
    /**
-    * Error message to display if a controller returns unsuccessfully.
-    *
-    * @var string
-    */
-   private $_error;
-
-   /**
     * If set, a redirect is triggered to this route rather than responding normally.
     *
     * @var string
@@ -271,16 +264,6 @@ class Route
    public function setPermissionToken(string $permission_token): void
    {
       $this->_permission_token = $permission_token;
-   }
-
-   /**
-    * Returns the error string.
-    *
-    * @return string
-    */
-   public function getError(): ?string
-   {
-      return $this->_error;
    }
 
    /**
