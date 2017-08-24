@@ -69,6 +69,14 @@ class Route
     */
    private $_controllers = [];
 
+    /**
+     * Set of aliases for the route. Any number of aliases can be defined for the route and will function identically
+     * to calling the route by its original name.
+     *
+     * @var string[]
+     */
+   private $_aliases = [];
+
    /**
     * The file name of the template for HTML responses.
     *
@@ -77,7 +85,7 @@ class Route
    private $_template;
 
    /**
-    * The permission token required to access the route. If this remains as an empty string, no permission is required.
+    * The permission token required to access the route. If this remains empty, no permission is required.
     *
     * @var string
     */
@@ -203,6 +211,26 @@ class Route
    public function getControllers(): array
    {
       return $this->_controllers;
+   }
+
+   /**
+    * Returns the set of aliases for the route.
+    *
+    * @return string[]
+    */
+   public function getAliases(): array
+   {
+      return $this->_aliases;
+   }
+
+   /**
+    * Adds an alias for the route.
+    *
+    * @param string $alias
+    */
+   public function addAlias(string $alias): void
+   {
+      $this->_aliases[] = $alias;
    }
 
    /**

@@ -64,6 +64,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests route aliasing by calling a route via its alias.
+    *
+    * @runInSeparateProcess
+    */
+   public function testRouteAliasing(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/true_alias";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the error routing by calling a route that intentionally fails.
     *
     * @runInSeparateProcess

@@ -29,6 +29,7 @@ class TestGroup extends Group
    {
       $Route = new Route("true", [TrueController::class]);
       $Route->setTemplate("test");
+      $Route->addAlias("true_alias");
       $this->addRoute($Route);
 
       $Route = new Route("true", [TrueController::class]);

@@ -30,13 +30,16 @@ abstract class Group
    protected $_Routes = [Route::GET => [], Route::POST => []];
 
    /**
-    * Adds a route to the group by its name.
+    * Adds a route to the group by its name as well as any aliases it may have.
     *
     * @param Route $Route
     */
    final public function addRoute(Route $Route): void
    {
       $this->_Routes[$Route->getRequestMethod()][$Route->getName()] = $Route;
+
+      foreach($Route->getAliases() as $alias)
+         $this->_Routes[$Route->getRequestMethod()][$alias] = $Route;
    }
 
    /**
