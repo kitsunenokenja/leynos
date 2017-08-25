@@ -19,7 +19,15 @@ spl_autoload_register(
    function($class)
    {
       $file = str_replace(['\\', "kitsunenokenja/leynos"], ['/', "../"], $class) . ".php";
-      if(is_file(__DIR__ . "/$file"))
+      if(stream_resolve_include_path($file) !== false || is_file($file))
+      {
+         require_once $file;
+      }
+      elseif(stream_resolve_include_path(str_replace("Box/Spout", "Spout", $file)) !== false)
+      {
+         require_once str_replace("Box/", "", $file);
+      }
+      elseif(is_file(__DIR__ . "/$file"))
       {
          require_once __DIR__ . "/$file";
       }

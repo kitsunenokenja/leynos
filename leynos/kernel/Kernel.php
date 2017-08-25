@@ -451,14 +451,14 @@ class Kernel
          $Controller->setDocumentRoot($this->_document_root);
          $Controller->setAcceptLanguage($this->_accept_language);
 
-         // Pass the DB credentials and connections to the controller.
+         // Pass the DB credentials and connections to the controller
          $Controller->setPDOSettings($this->_Config->getPDOSettings());
          $Controller->setDatabases($this->_Databases);
 
-         // Pass the HTTP Headers reference to the controller.
+         // Pass the HTTP Headers reference to the controller
          $Controller->setHTTPHeaders($this->_HTTPHeaders);
 
-         // Always provide references to request/memory stores.
+         // Always provide references to request/memory stores
          $Controller->addInput("Session", $this->_Session);
          $Controller->addInput("Request", $this->_Request);
          $Controller->addInput("Files", $this->_Files);
