@@ -29,6 +29,9 @@ class Route
    const GET = 1;
    const POST = 2;
 
+   // Wildcard token for default routes which handle otherwise undefined route names
+   const DEFAULT_ROUTE = "*";
+
    /**
     * The route name.
     *

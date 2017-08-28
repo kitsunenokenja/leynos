@@ -76,6 +76,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the invocation of a default route.
+    *
+    * @runInSeparateProcess
+    */
+   public function testDefaultRouteExecution(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/default-route";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the error routing by calling a route that intentionally fails.
     *
     * @runInSeparateProcess
@@ -100,13 +112,13 @@ class KernelTest extends TestCase
    }
 
    /**
-    * Tests the handling of an invalid route with a valid request and group name.
+    * Tests the handling of an invalid route with a valid request.
     *
     * @runInSeparateProcess
     */
    public function testUndefinedRoute(): void
    {
-      $_SERVER['REQUEST_URI'] = "/test/undefined";
+      $_SERVER['REQUEST_URI'] = "/undefined/undefined";
       new Kernel(new TestConfig());
       $this->assertEquals(404, http_response_code());
    }

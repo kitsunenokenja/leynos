@@ -419,8 +419,9 @@ class Kernel
       // Apply group overrides to options
       $this->_overrideOptions($this->_Group->getOverrides());
 
-      // Abort if the requested route isn't defined in the group
-      if(($Route = $this->_Group->getRoute($this->_Request->getRoute(), $this->_request_method)) === null)
+      // Abort if the requested route isn't defined in the group and there is no default either
+      if(($Route = $this->_Group->getRoute($this->_Request->getRoute(), $this->_request_method)) === null &&
+         ($Route = $this->_Group->getDefaultRoute($this->_request_method)) === null)
       {
          throw new RoutingException("Undefined route.");
       }

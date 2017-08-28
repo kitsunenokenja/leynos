@@ -42,6 +42,10 @@ class TestGroup extends Group
       $Route->setTemplate("test");
       $this->addRoute($Route);
 
+      $Route = new Route(Route::DEFAULT_ROUTE, [TrueController::class]);
+      $Route->setTemplate("test");
+      $this->addRoute($Route);
+
       $Route = new Route("auth", [TrueController::class]);
       $Route->setPermissionToken("TEST_TOKEN");
       $Route->setTemplate("test");

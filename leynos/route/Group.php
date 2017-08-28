@@ -56,6 +56,19 @@ abstract class Group
    }
 
    /**
+    * Returns the default route. Assigning a default route to the group designates that route to be invocated by default
+    * if the requested name does not otherwise exist within the group.
+    *
+    * @param int $method
+    *
+    * @return Route|null
+    */
+   final public function getDefaultRoute(int $method = Route::GET): ?Route
+   {
+      return $this->getRoute(Route::DEFAULT_ROUTE, $method);
+   }
+
+   /**
     * The array of global controllers is a series of controllers that always execute prior to a specific route's series
     * of controllers for any route within the group.
     *
