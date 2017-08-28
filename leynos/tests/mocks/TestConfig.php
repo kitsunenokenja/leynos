@@ -35,6 +35,7 @@ class TestConfig extends Config
     */
    public function __construct()
    {
+      $this->_root_index_route = "/test/true";
       $this->_error_route = "/test/error";
       $this->_routing_map = ['test' => TestGroup::class];
       $this->_memory_store_class = TestStore::class;

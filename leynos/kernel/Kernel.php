@@ -366,6 +366,11 @@ class Kernel
     */
    private function _parseRouteRequest(string $route_request): Route
    {
+      // Translate a root index request to a defined route
+      if($route_request === "/")
+         $route_request = $this->_Config->getRootIndexRoute();
+
+      // Verify the request is well-formed, and if so, capture the group/route names and response method accordingly
       if(preg_match($this->_Config->getRoutingPattern(), $route_request, $matches) !== 1)
       {
          throw new RoutingException("Invalid request route.");

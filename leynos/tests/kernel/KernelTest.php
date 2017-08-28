@@ -88,6 +88,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the internal routing for handling a root index (GET /) request.
+    *
+    * @runInSeparateProcess
+    */
+   public function testRootIndexRequest(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the error routing by calling a route that intentionally fails.
     *
     * @runInSeparateProcess

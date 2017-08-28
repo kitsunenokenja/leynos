@@ -82,6 +82,17 @@ abstract class Config
    protected $_routing_pattern = '#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#';
 
    /**
+    * The only route that violates the routing pattern yet must be valid is the request for root index i.e. GET /
+    * requests. This option allows an implicit re-route to a well-formed route for handling such requests.
+    *
+    * Using this option is highly recommended if the web server daemon is not performing a rewrite itself to direct root
+    * index requests already.
+    *
+    * @var string
+    */
+   protected $_root_index_route = "/main/index";
+
+   /**
     * The error route for re-routing to handle internal failures. This should be a defined route as the default fallback
     * for errors or failures otherwise not handled. This route must be a definitive execution path that cannot throw
     * exceptions to ensure sane responses. An error route that raises yet another exception will bubble up unhandled
@@ -197,6 +208,16 @@ abstract class Config
    final public function getRoutingPattern(): string
    {
       return $this->_routing_pattern;
+   }
+
+   /**
+    * Returns the root index route.
+    *
+    * @return string
+    */
+   final public function getRootIndexRoute(): string
+   {
+      return $this->_root_index_route;
    }
 
    /**
