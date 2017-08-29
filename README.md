@@ -1,5 +1,6 @@
 # Leynos
-Lightweight PHP7 MVC framework featuring chainable controllers. PHP ≥ 7.1.0 is required.
+## Overview ##
+Lightweight PHP7 MVC framework featuring atomic controller chains. PHP ≥ 7.1.0 is required.
 
 The Leynos framework project aims to provide an open source MVC framework written entirely in PHP7. This framework is
 designed to be as flexible as it is compact. Most PHP applications built with the MVC pattern running atop a framework
@@ -12,10 +13,21 @@ right into Leynos to power it which in turn powers your application. Connect tem
 and memory stores such as Redis or memcached, as well as any database that can be accessed through PHP's PDO abstraction
 layer.
 
-This was originally a custom implementation for a specific application, then proceeded to evolve into a standalone
-framework which is its starting point here, beginning with ripping out any hard associations to the application it was
-originally designed to power. There are design changes and additions coming before it can be realistically adopted. This
-README shall be updated as development advances, to elaborate upon Leynos' functionality and to document its usage, as
-well as provide friendly instructions on hacking Leynos, for building new extensions for it which may not be integrated
-to the mainline, and even for hacking the kernel of the framework itself to truly customise its behaviour to tailor it
-for a specific application altogether.
+Instructions for installing and using the framework will be documented in the
+[wiki](https://github.com/kitsunenokenja/leynos/wiki).
+
+## Features ##
+The following list of features is not exhaustive, but indicates some of this framework's capabilities.
+* Chaining single-purpose atomic controllers
+* Custom routing patterns and route aliasing
+* Permission token protection for routes
+* Input mapping for controllers
+* Response/routing handling within the framework
+* Lazy-loading of PDO DB connections
+* Support for memcached & Redis memory stores included
+* Support for Smarty & Twig template engines included
+* Namespaces of keys for memory stores
+* Binary view support with PDF and CSV/ODS/XLSX support included, provided by [FPDF](http://www.fpdf.org/) and
+[Spout](https://github.com/box/spout) libraries respectively
+
+Please see the [wiki](https://github.com/kitsunenokenja/leynos/wiki) for further details of the aforementioned features.
