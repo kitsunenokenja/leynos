@@ -100,6 +100,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the output mapping for a route.
+    *
+    * @runInSeparateProcess
+    */
+   public function testMappedOutputRoute(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/mapped/json";
+      $this->expectOutputString(json_encode(['existing_key' => true, 'non_existent_key' => null]));
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the error routing by calling a route that intentionally fails.
     *
     * @runInSeparateProcess

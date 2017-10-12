@@ -446,6 +446,7 @@ class Kernel
     */
    private function _executeControllers(Route $Route, array &$data): bool
    {
+      $success = true;
       $data = array_merge($data, $Route->getInputs());
       foreach(array_merge($this->_Group->globalControllers(), $Route->getControllers()) as $controller)
       {
@@ -513,10 +514,22 @@ class Kernel
 
          // End execution if the controller failed
          if(!$success)
-            return false;
+            break;
       }
 
-      return true;
+      // Transform the data output array if an output map has been defined
+      if(($map = $Route->getOutputMap()) !== null)
+      {
+         // For each alias in the map, copy from the current output array to the new one
+         $mapped_data = [];
+         foreach($map as $source => $destination)
+            $mapped_data[$destination] = $data[$source] ?? null;
+
+         // Clobber the old output array
+         $data = $mapped_data;
+      }
+
+      return $success;
    }
 
    /**

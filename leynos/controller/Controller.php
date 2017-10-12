@@ -145,6 +145,16 @@ abstract class Controller
    }
 
    /**
+    * Merges keyed values into the outputs.
+    *
+    * @param array $values
+    */
+   final protected function _addOutputs(array $values): void
+   {
+      $this->_out = array_merge($this->_out, $values);
+   }
+
+   /**
     * Returns the message stack.
     *
     * @return Message[]

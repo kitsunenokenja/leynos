@@ -66,6 +66,14 @@ class Route
    ];
 
    /**
+    * Array of aliases mapping actual output names to new values. The definition of an output map will override the
+    * default behaviour of supplying all available outputs to the view by providing only what the map dictates.
+    *
+    * @var array
+    */
+   private $_output_map;
+
+   /**
     * The sequence of controllers to execute.
     *
     * @var string[]
@@ -197,6 +205,26 @@ class Route
    public function addStoreInput(int $store, string $key): void
    {
       $this->_store_inputs_map[$store][] = $key;
+   }
+
+   /**
+    * Returns the output map.
+    *
+    * @return array
+    */
+   public function getOutputMap(): ?array
+   {
+      return $this->_output_map;
+   }
+
+   /**
+    * Sets the output map.
+    *
+    * @param array $output_map
+    */
+   public function setOutputMap(array $output_map): void
+   {
+      $this->_output_map = $output_map;
    }
 
    /**

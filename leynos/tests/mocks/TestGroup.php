@@ -51,6 +51,15 @@ class TestGroup extends Group
       $Route->setTemplate("test");
       $this->addRoute($Route);
 
+      $Route = new Route("mapped", []);
+      $Route->addInput("key1", true);
+      $Route->addInput("key2", false);
+      $Route->setOutputMap([
+         'key1' => "existing_key",
+         'key3' => "non_existent_key"
+      ]);
+      $this->addRoute($Route);
+
       $Route = new Route("error", [TrueController::class]);
       $Route->setTemplate("test");
       $this->addRoute($Route);
