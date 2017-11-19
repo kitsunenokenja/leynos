@@ -251,7 +251,7 @@ abstract class Controller
     *
     * @param string $accept_language
     */
-   final public function setAcceptLanguage(string $accept_language): void
+   final public function setAcceptLanguage(string $accept_language = null): void
    {
       $this->_accept_language = $accept_language;
    }
