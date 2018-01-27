@@ -240,35 +240,42 @@ class Kernel
          // Respond via view
          $this->_renderView($Route, $status, $data);
       }
-      // Respond to bad route requests with a 404
-      catch(RoutingException $E)
-      {
-         $this->_HTTPHeaders->notFound();
-         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $data = ['Error' => $E];
-         $this->_executeControllers($Route, $data);
-         $this->_renderView($Route, true, $data);
-      }
-      // Valid but unauthorised requests respond with a 403
-      catch(UnauthorizedActionException $E)
-      {
-         $this->_HTTPHeaders->forbidden();
-         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $data = ['Error' => $E];
-         $this->_executeControllers($Route, $data);
-         $this->_renderView($Route, true, $data);
-      }
-      // All other failures result in 500
       catch(Exception | Error $E)
       {
-         // Register the failure in the log
-         trigger_error($E->getMessage(), E_USER_WARNING);
+         // Respond to bad route requests with a 404
+         if($E instanceof RoutingException)
+         {
+            $this->_HTTPHeaders->notFound();
+         }
+         // Valid but unauthorised requests respond with a 403
+         elseif($E instanceof UnauthorizedActionException)
+         {
+            $this->_HTTPHeaders->forbidden();
+         }
+         // All other failures result in 500
+         else
+         {
+            // Register the failure in the log
+            trigger_error($E->getMessage(), E_USER_WARNING);
 
-         $this->_HTTPHeaders->internalServerError();
-         $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
-         $data = ['Error' => $E];
-         $this->_executeControllers($Route, $data);
-         $this->_renderView($Route, true, $data);
+            $this->_HTTPHeaders->internalServerError();
+         }
+
+         // This is already a last-resort fallback. If this response still fails with a raised exception, there is
+         // nothing more to attempt as the problem is a misconfiguration by the application developer.
+         try
+         {
+            $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
+            $data = ['Error' => $E];
+            $this->_executeControllers($Route, $data);
+            $this->_renderView($Route, true, $data);
+         }
+         catch(Exception $E)
+         {
+            // This last-resort fallback should never fail, but if it does, log the incident to expose the
+            // misconfiguration.
+            trigger_error($E->getMessage(), E_USER_ERROR);
+         }
       }
    }
 

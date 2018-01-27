@@ -44,6 +44,16 @@ class TestConfig extends Config
    }
 
    /**
+    * Sets the error route.
+    *
+    * @param string $error_route
+    */
+   public function setErrorRoute(string $error_route): void
+   {
+      $this->_error_route = $error_route;
+   }
+
+   /**
     * Sets the mock authentication flag.
     *
     * @param bool $auth

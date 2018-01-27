@@ -11,6 +11,7 @@
 
 namespace kitsunenokenja\leynos\tests\kernel;
 
+use Exception;
 use kitsunenokenja\leynos\kernel\Kernel;
 use kitsunenokenja\leynos\tests\mocks\TestConfig;
 use PHPUnit\Framework\Error\Warning;
@@ -121,6 +122,27 @@ class KernelTest extends TestCase
       $_SERVER['REQUEST_URI'] = "/test/false";
       new Kernel(new TestConfig());
       $this->assertEquals(303, http_response_code());
+   }
+
+   /**
+    * Tests the kernel's exception-handling fallback's exception handling by forcing an invalid error route.
+    *
+    * @runInSeparateProcess
+    */
+   public function testFailingFallbackExecution(): void
+   {
+      $TestConfig = new TestConfig();
+      $TestConfig->setErrorRoute("/invalid/route");
+      $_SERVER['REQUEST_URI'] = "/test/false";
+      try
+      {
+         new Kernel($TestConfig);
+      }
+      catch(Exception $E)
+      {
+         $this->assertFalse(true);
+      }
+      $this->assertTrue(true);
    }
 
    /**
