@@ -31,11 +31,12 @@ class Memcached extends MemoryStore
 
    /**
     * Connects to the Memcached store.
+    *
+    * @param MemcachedClient $Memcached
     */
-   public function __construct()
+   public function __construct(MemcachedClient $Memcached)
    {
-      $this->_Memcached = new MemcachedClient();
-      $this->_Memcached->addServer("localhost", 11211);
+      $this->_Memcached = $Memcached;
    }
 
    /**

@@ -12,7 +12,7 @@
 namespace kitsunenokenja\leynos\memory_store;
 
 use Exception;
-use Predis\Client;
+use Predis\Client as RedisClient;
 
 /**
  * Redis
@@ -26,16 +26,18 @@ class Redis extends MemoryStore
    /**
     * Reference to the Redis client.
     *
-    * @var Client
+    * @var RedisClient
     */
    private $_Redis;
 
    /**
     * Connects to the Redis store.
+    *
+    * @param RedisClient $Redis
     */
-   public function __construct()
+   public function __construct(RedisClient $Redis)
    {
-      $this->_Redis = new Client();
+      $this->_Redis = $Redis;
    }
 
    /**

@@ -12,6 +12,7 @@
 namespace kitsunenokenja\leynos\tests\mocks;
 
 use kitsunenokenja\leynos\config\{Config, Options};
+use kitsunenokenja\leynos\memory_store\MemoryStore;
 use kitsunenokenja\leynos\memory_store\Session;
 
 /**
@@ -38,7 +39,6 @@ class TestConfig extends Config
       $this->_root_index_route = "/test/true";
       $this->_error_route = "/test/error";
       $this->_routing_map = ['test' => TestGroup::class];
-      $this->_memory_store_class = TestStore::class;
       $this->_template_engine_class = TestView::class;
       $this->_Options = new Options();
    }
@@ -61,6 +61,14 @@ class TestConfig extends Config
    public function setAuthenticated(bool $auth): void
    {
       $this->_auth = $auth;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getMemoryStore(): MemoryStore
+   {
+      return new TestStore();
    }
 
    /**

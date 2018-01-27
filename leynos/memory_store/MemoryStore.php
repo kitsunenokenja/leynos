@@ -17,8 +17,6 @@ namespace kitsunenokenja\leynos\memory_store;
  * All memory stores must extend this class. Implementations will wrap the memory stores they represent by defining the
  * methods enumerated here.
  *
- * TODO - Create an abstract generic settings container for memory store configurations to be consumed by concretions.
- *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
 abstract class MemoryStore

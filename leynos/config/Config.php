@@ -12,7 +12,7 @@
 namespace kitsunenokenja\leynos\config;
 
 use Closure;
-use kitsunenokenja\leynos\memory_store\{MemoryStore, Redis, Session};
+use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
 use kitsunenokenja\leynos\view\{TemplateView, TwigView};
 
 /**
@@ -104,16 +104,6 @@ abstract class Config
     * @var string
     */
    protected $_error_route = "/error/error";
-
-   /**
-    * Class name of the memory store implementation for the framework to use. The default is Redis to ensure a sane
-    * default configuration.
-    *
-    * @see MemoryStore
-    *
-    * @var string
-    */
-   protected $_memory_store_class = Redis::class;
 
    /**
     * Class name of the template view implementation for the framework to use to render templates. The default Twig view
@@ -231,15 +221,11 @@ abstract class Config
    }
 
    /**
-    * Returns the memory store of the configured type.
+    * Returns the memory store that the framework kernel will engage.
     *
     * @return MemoryStore
     */
-   final public function getMemoryStore(): MemoryStore
-   {
-      $class = $this->_memory_store_class;
-      return new $class();
-   }
+   abstract public function getMemoryStore(): MemoryStore;
 
    /**
     * Returns the template engine of the configured type.

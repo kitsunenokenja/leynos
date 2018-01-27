@@ -12,7 +12,8 @@
 namespace kitsunenokenja\leynos\config;
 
 use kitsunenokenja\leynos\config\groups\SampleGroup;
-use kitsunenokenja\leynos\memory_store\Session;
+use kitsunenokenja\leynos\memory_store\{MemoryStore, Redis, Session};
+use predis\Client as RedisClient;
 
 /**
  * SampleConfiguration
@@ -106,6 +107,14 @@ class SampleConfiguration extends Config
        * environments on the same PHP server.
        */
       $this->_cache_namespace = "sample_prefix";
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getMemoryStore(): MemoryStore
+   {
+      return new Redis(new RedisClient());
    }
 
    /**
