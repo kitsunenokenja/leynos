@@ -1,2 +1,5 @@
 # PHPStorm IDE
 .idea
+
+# vim
+*.swp
