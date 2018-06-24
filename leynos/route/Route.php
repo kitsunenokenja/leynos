@@ -12,6 +12,7 @@
 namespace kitsunenokenja\leynos\route;
 
 use kitsunenokenja\leynos\config\Options;
+use kitsunenokenja\leynos\controller\Slice;
 use kitsunenokenja\leynos\memory_store\MemoryStore;
 
 /**
@@ -74,11 +75,11 @@ class Route
    private $_output_map;
 
    /**
-    * The sequence of controllers to execute.
+    * The sequence of controller slices to execute.
     *
-    * @var string[]
+    * @var Slice[]
     */
-   private $_controllers = [];
+   private $_slices = [];
 
     /**
      * Set of aliases for the route. Any number of aliases can be defined for the route and will function identically
@@ -124,15 +125,15 @@ class Route
    private $_OptionsModifier;
 
    /**
-    * Route constructor.
+    * Creates a route object.
     *
-    * @param string $name
-    * @param array  $controllers
+    * @param string  $name
+    * @param Slice[] $Slices
     */
-   public function __construct(string $name, array $controllers)
+   public function __construct(string $name, array $slices = [])
    {
       $this->_name = $name;
-      $this->_controllers = $controllers;
+      $this->_slices = $slices;
    }
 
    /**
@@ -228,13 +229,13 @@ class Route
    }
 
    /**
-    * Returns the array of controller class names to instantiate and execute.
+    * Returns the array of controller slices whose controllers to instantiate and execute.
     *
-    * @return string[]
+    * @return Slice[]
     */
-   public function getControllers(): array
+   public function getSlices(): array
    {
-      return $this->_controllers;
+      return $this->_slices;
    }
 
    /**
