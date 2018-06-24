@@ -14,7 +14,7 @@ namespace kitsunenokenja\leynos\kernel;
 use Error;
 use Exception;
 use kitsunenokenja\leynos\config\{Config, Options};
-use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException};
+use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException, Slice};
 use kitsunenokenja\leynos\file_system\PostFile;
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
 use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
@@ -455,11 +455,10 @@ class Kernel
    {
       $success = true;
       $data = array_merge($data, $Route->getInputs());
-      foreach(array_merge($this->_Group->globalControllers(), $Route->getControllers()) as $controller)
+      // TODO - Replace globalControllers() with Slice-compatible
+      foreach(array_merge($this->_Group->globalControllers(), $Route->getSlices()) as $Slice)
       {
-         // Instantiate the controller
-         /** @var Controller $Controller */
-         $Controller = new $controller();
+         $Controller = $Slice->getController();
 
          // Pass along the document root and accept language contents
          $Controller->setDocumentRoot($this->_document_root);
@@ -480,19 +479,19 @@ class Kernel
          $Controller->addInput("TemplateEngine", $this->_TemplateEngine);
 
          // Supply memory store values based on the provided mapping
-         foreach($Route->getStoreInputsMap()[MemoryStore::REQUEST] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::REQUEST] as $store_key)
          {
             $Controller->addInput($store_key, $this->_Request->__get($store_key));
          }
-         foreach($Route->getStoreInputsMap()[MemoryStore::SESSION] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::SESSION] as $store_key)
          {
             $Controller->addInput($store_key, $this->_Session->getKey($store_key));
          }
-         foreach($Route->getStoreInputsMap()[MemoryStore::GLOBAL_STORE] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::GLOBAL_STORE] as $store_key)
          {
             $Controller->addInput($store_key, $this->_MemStore->getKey($store_key));
          }
-         foreach($Route->getStoreInputsMap()[MemoryStore::LOCAL_STORE] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::LOCAL_STORE] as $store_key)
          {
             $Controller->addInput(
                $store_key,
@@ -504,12 +503,30 @@ class Kernel
          // to another.
          $Controller->addInput("_data", $data);
 
+         // Load all mapped inputs
+         foreach($Slice->getInputMap() as $key => $value)
+            $Controller->addInput($key, $value);
+
          // Execute the controller
          $success = $Controller->main();
 
-         // Capture controller outputs and messages
-         $data = array_merge($data, $Controller->getOutputs());
+         // Capture controller messages
          $this->_Messages = array_merge($this->_Messages, $Controller->getMessages());
+
+         // Capture mapped outputs from controller
+         $data = array_merge($data, $Controller->getOutputs());
+         foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $value)
+         {
+            $this->_Session->setKey($key, $value);
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $value)
+         {
+            $this->_MemStore->setKey($key, $value);
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $value)
+         {
+            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $key, $value);
+         }
 
          // Capture current DB connections for persistence
          $this->_Databases = $Controller->getDatabases();
@@ -625,3 +642,5 @@ class Kernel
       $Options->setEnableRoutingCache($overrides[Options::ENABLE_ROUTING_CACHE] ?? $Options->getEnableRoutingCache());
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :
