@@ -69,12 +69,12 @@ abstract class Group
    }
 
    /**
-    * The array of global controllers is a series of controllers that always execute prior to a specific route's series
+    * The array of global slices is a series of controller slices that always execute prior to a specific route's series
     * of controllers for any route within the group.
     *
     * @return string[]
     */
-   public function globalControllers(): array
+   public function globalSlices(): array
    {
       return [];
    }

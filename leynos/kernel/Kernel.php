@@ -455,8 +455,7 @@ class Kernel
    {
       $success = true;
       $data = array_merge($data, $Route->getInputs());
-      // TODO - Replace globalControllers() with Slice-compatible
-      foreach(array_merge($this->_Group->globalControllers(), $Route->getSlices()) as $Slice)
+      foreach(array_merge($this->_Group->globalSlices(), $Route->getSlices()) as $Slice)
       {
          $Controller = $Slice->getController();
 
