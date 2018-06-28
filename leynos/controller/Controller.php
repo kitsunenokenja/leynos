@@ -269,7 +269,7 @@ abstract class Controller
    /**
     * Main function of the controller that is called by the framework to begin the controller's execution.
     *
-    * @return bool
+    * @return int
     */
-   abstract public function main(): bool;
+   abstract public function main(): int;
 }

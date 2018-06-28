@@ -14,7 +14,7 @@ namespace kitsunenokenja\leynos\kernel;
 use Error;
 use Exception;
 use kitsunenokenja\leynos\config\{Config, Options};
-use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException, Slice};
+use kitsunenokenja\leynos\controller\{Controller, ControllerFailureException, ExitState, Slice};
 use kitsunenokenja\leynos\file_system\PostFile;
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
 use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
@@ -225,10 +225,10 @@ class Kernel
             $this->_TemplateEngine = $this->_Config->getTemplateEngine($this->_document_root);
          }
 
-         // Process the execution path dictated by the route by iterating through its controller list
+         // Process the execution path dictated by the route by iterating through its slices
          $data = [];
          $this->_Messages = $this->_Session->getKey("_Messages") ?? [];
-         $status = $this->_executeControllers($Route, $data);
+         $ExitState = $this->_executeControllers($Route, $data);
 
          // Save controller-generated messages. This stack will continue to accumulate until an HTML view is served.
          if($this->_Messages !== [])
@@ -237,8 +237,11 @@ class Kernel
             $this->_Session->setKey("_Messages", $this->_Messages);
          }
 
-         // Respond via view
-         $this->_renderView($Route, $status, $data);
+         // Conclude by redirection or rendering a view
+         if($ExitState->getMode() === ExitState::REDIRECT)
+            $this->_HTTPHeaders->redirect($ExitState->getTarget());
+         else
+            $this->_renderView($ExitState, $data);
       }
       catch(Exception | Error $E)
       {
@@ -267,8 +270,7 @@ class Kernel
          {
             $Route = $this->_parseRouteRequest($this->_Config->getErrorRoute());
             $data = ['Error' => $E];
-            $this->_executeControllers($Route, $data);
-            $this->_renderView($Route, true, $data);
+            $this->_renderView($this->_executeControllers($Route, $data), $data);
          }
          catch(Exception $E)
          {
@@ -444,16 +446,18 @@ class Kernel
    }
 
    /**
-    * Executes a controller sequence for a route then returns the status of the operation.
+    * Executes a controller sequence for a route.
     *
     * @param Route $Route The route whose controllers to execute.
     * @param array $data  Array of volatile inputs/outputs that persist between controllers.
     *
-    * @return bool
+    * @return ExitState
+    *
+    * @throws ControllerFailureException Thrown if execution concludes but no exit state was ever assigned.
     */
-   private function _executeControllers(Route $Route, array &$data): bool
+   private function _executeControllers(Route $Route, array &$data): ExitState
    {
-      $success = true;
+      $ExitState = null;
       $data = array_merge($data, $Route->getInputs());
       foreach(array_merge($this->_Group->globalSlices(), $Route->getSlices()) as $Slice)
       {
@@ -507,7 +511,7 @@ class Kernel
             $Controller->addInput($key, $value);
 
          // Execute the controller
-         $success = $Controller->main();
+         $return_code = $Controller->main();
 
          // Capture controller messages
          $this->_Messages = array_merge($this->_Messages, $Controller->getMessages());
@@ -535,10 +539,23 @@ class Kernel
          if($Controller->getBinaryView() !== null)
             $this->_View = $Controller->getBinaryView();
 
-         // End execution if the controller failed
-         if(!$success)
-            break;
+         // Check for exit. If one is defined, no more slices will be executed.
+         foreach($Slice->getExitStateMap() as $State)
+         {
+            if($return_code === $State->getState())
+            {
+               $ExitState = $State;
+               break 2;
+            }
+         }
       }
+
+      // All slices exited but no exit state was ever attributed
+      if($ExitState === null)
+         throw new ControllerFailureException("Kernel: Slice execution terminated without exit state designation.");
+      // Redirections have no view to prepare
+      elseif($ExitState->getMode() === ExitState::REDIRECT)
+         return $ExitState;
 
       // Transform the data output array if an output map has been defined
       if(($map = $Route->getOutputMap()) !== null)
@@ -552,38 +569,19 @@ class Kernel
          $data = $mapped_data;
       }
 
-      return $success;
+      return $ExitState;
    }
 
    /**
     * Conclude the execution with a response based on the view to use.
     *
-    * @param Route $Route  The route whose view to render.
-    * @param bool  $status The success state from the controller execution loop.
-    * @param array $data   Accumulation of data for the view to consume.
+    * @param ExitState $ExitState Signal containing directives for the response.
+    * @param array     $data      Accumulation of data for the view to consume.
     *
-    * @throws ControllerFailureException Thrown if a controller loop fails without redirection handling.
     * @throws Exception                  General failure for inappropriate attempts to render binary views.
     */
-   private function _renderView(Route $Route, bool $status, array $data): void
+   private function _renderView(ExitState $ExitState, array $data): void
    {
-      // Check for redirects prior to defaulting to rendering a view
-      if($status && $Route->getRedirectRoute() !== null)
-      {
-         $this->_HTTPHeaders->redirect($Route->getRedirectRoute());
-         return;
-      }
-
-      if(!$status && $Route->getFailureRoute() !== null)
-      {
-         $this->_HTTPHeaders->redirect($Route->getFailureRoute());
-         return;
-      }
-
-      // Check for failure without redirects
-      if(!$status)
-         throw new ControllerFailureException($data['error'] ?? "Kernel: Unknown failure.");
-
       // Initialise the view engine with respect to the response mode
       switch($this->_response_mode)
       {
@@ -604,7 +602,7 @@ class Kernel
 
             // Prepare the view with the template to be rendered
             $View = $this->_Config->getTemplateEngine($this->_document_root);
-            $View->setTemplate($Route->getTemplate());
+            $View->setTemplate($ExitState->getTarget());
             $this->_View = $View;
             break;
          case "JSON":

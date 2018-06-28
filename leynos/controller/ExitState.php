@@ -40,6 +40,16 @@ use kitsunenokenja\leynos\route\Route;
 class ExitState
 {
    /**
+    * Render mode is the default response mode. It signals the framework to trigger the view layer.
+    */
+   const RENDER = 0;
+
+   /**
+    * Redirect mode signals the framework to respond with a redirection to another route.
+    */
+   const REDIRECT = 1;
+
+   /**
     * Standard return code for success. This represents a controller has accomplished its objectives and returns with
     * confirmation of success. This default state may be used for any sort of success.
     */
