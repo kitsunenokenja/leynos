@@ -19,58 +19,78 @@ use kitsunenokenja\leynos\route\{Group, Route};
  *
  * Demonstration of a routing group definition. For further details & options, see the Route & Group classes.
  *
+ * This file is for reference purposes only, and, intentionally, is invalid code. Do not actually configure this group
+ * for the application.
+ *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
 class SampleGroup extends Group
 {
-    /**
-     * Defines the route group.
-     *
-     * This is a demo group only. Do not actually configure this group for the application. This file exists to
-     * illustrate how routes are defined for groups. Note that to avoid including invalid code in this file, all
-     * controller arrays are empty. Use class names to enumerate controller chains.
-     *
-     * e.g. $Route = new Route("three_controller_chain", [StepA::class, StepB::class, StepC::class]);
-     *
-     * These examples are based on framework defaults and may not be suitable for a given configuration, such as
-     * references to Twig template files and formatting of routing destinations.
-     *
-     * Also note that no special designations are used for specific request modes. Any route could legitimately be
-     * requested for a JSON response rather than HTML, for instance. However, request method is segregated. In other
-     * words, a route for a GET action and a route with an identical name for a POST action are two uniquely different
-     * routes. In the case of actual route naming collision, the most recent declaration prevails.
-     */
-    public function __construct()
-    {
-        // Example of setting an override for a routing group. See the Options class for a list of available overrides.
-        // In this example the group is defined with all routes not requiring an authenticated session to execute.
-        $this->_overrides[Options::SESSION_REQUIRED] = false;
+   /**
+    * Defines the route group.
+    *
+    * These examples are based on framework defaults and may not be suitable for a given configuration, such as
+    * references to Twig template files and formatting of routing destinations. Only the short syntax for slices is
+    * shown here.
+    *
+    * Also note that no special designations are used for specific request modes. Any route could legitimately be
+    * requested for a JSON response rather than HTML, for instance. However, request method is segregated. In other
+    * words, a route for a GET action and a route with an identical name for a POST action are two uniquely different
+    * routes. In the case of actual route naming collision, the most recent declaration prevails.
+    */
+   public function __construct()
+   {
+      // Example of setting an override for a routing group. See the Options class for a list of available overrides.
+      // In this example the group is defined with all routes not requiring an authenticated session to execute.
+      $this->_overrides[Options::SESSION_REQUIRED] = false;
 
-        // The most basic example. This route has no controllers to execute, and simply defines a template file to be
-        // rendered.
-        $Route = new Route("index", []);
-        $Route->setTemplate("index.twig");
-        $this->addRoute($Route);
+      // The most basic example. This route has no controllers to execute, and simply defines a template file to be
+      // rendered.
+      $Route = new Route("index", [
+         Slice::new()->
+            exitStateMap([
+               new ExitState(ExitState::SUCCESS, Route::RENDER, "index.twig")
+            ])
+      ]);
+      $this->addRoute($Route);
 
-        // Example of the request method call to designate the route as a POST handler rather than the default GET.
-        // Ideally, at least one controller would be defined here because it should be processing a POST submission.
-        $Route = new Route("post_action", []);
-        $Route->setRequestMethod(Route::POST);
-        $this->addRoute($Route);
+      /*
+       * Example of the request method call to designate the route as a POST handler rather than the default GET.
+       * A single slice is defined here for the controller chain as a minimal example where an input array is fed for
+       * processing and the PRG pattern is applied to conclude processing.
+       */
+      $Route = new Route("post_action", [
+         Slice::new(PostHandler::class)->
+            storeInputMap([
+               MemoryStore::REQUEST => ["form_data"]
+            ])->
+            exitStateMap([
+               new ExitState(ExitState::SUCCESS, Route::REDIRECT, "/index/index"),
+               new ExitState(ExitState::FAILURE, Route::REDIRECT, "/error/error")
+            ])
+      ]);
+      $Route->setRequestMethod(Route::POST);
+      $this->addRoute($Route);
 
-        // Redirection example. Either successful or failure redirection can be set, or both can be set. This is very
-        // useful for building PRG patterns.
-        $Route = new Route("redirect", []);
-        $Route->setRedirectRoute("/group/successful_route");
-        $Route->setFailureRoute("/group/failure_route");
-        $this->addRoute($Route);
-
-        // This route demonstrates supplying additional inputs for the controllers, which will also be available at the
-        // template level when the view renders. Note the route-specific option overriding the group override.
-        $Route = new Route("another_route", []);
-        $Route->addInput("special_value", "custom");
-        $Route->setTemplate("another_route.twig");
-        $Route->setSessionRequired(true);
-        $this->addRoute($Route);
-    }
+      // This route demonstrates supplying additional inputs for the controllers, which will also be available at the
+      // template level under an alias when the view renders, numerous exit state handlers, and setting a custom option.
+      $Route = new Route("another_route", [
+         Slice::new(DataLoader::class)->
+            inputMap([
+               "special_value" => "custom"
+            ])->
+            outputMap([
+               "special_value" => "value"
+            ])->
+            exitStateMap([
+               new ExitState(ExitState::SUCCESS, Route::RENDER, "another_route.twig"),
+               new ExitState(ExitState::FAILURE, Route::REDIRECT, "/error/generic_error"),
+               new ExitState(ExitState::DATABASE_FAILURE, Route::REDIRECT, "/error/db_error")
+            ])
+      ]);
+      $Route->setSessionRequired(true);
+      $this->addRoute($Route);
+   }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :
