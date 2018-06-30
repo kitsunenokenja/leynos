@@ -11,23 +11,22 @@
 
 namespace kitsunenokenja\leynos\tests\mocks;
 
-use kitsunenokenja\leynos\controller\Controller;
+use kitsunenokenja\leynos\controller\{Controller, ExitState};
 
 /**
- * TrueController
+ * FailureController
  *
- * This controller always succeeds and returns true.
+ * This controller always return failure.
  *
  * @author Rob Levitsky <kitsunenokenja@protonmail.ch>
  */
-class TrueController extends Controller
+class FailureController extends Controller
 {
    /**
     * {@inheritdoc}
     */
-   public function main(): bool
+   public function main(): int
    {
-      $this->_out = ['output' => "success"];
-      return true;
+      return ExitState::FAILURE;
    }
 }

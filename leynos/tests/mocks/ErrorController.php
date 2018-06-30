@@ -26,7 +26,7 @@ class ErrorController extends Controller
    /**
     * {@inheritdoc}
     */
-   public function main(): bool
+   public function main(): int
    {
       throw new Exception();
    }

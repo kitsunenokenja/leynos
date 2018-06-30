@@ -11,6 +11,7 @@
 
 namespace kitsunenokenja\leynos\tests\mocks;
 
+use kitsunenokenja\leynos\controller\{ExitState, Slice};
 use kitsunenokenja\leynos\route\{Group, Route};
 
 /**
@@ -27,45 +28,66 @@ class TestGroup extends Group
     */
    public function __construct()
    {
-      $Route = new Route("true", [TrueController::class]);
-      $Route->setTemplate("test");
+      // Basic successful route with a single output. This route also defines an alias.
+      $Route = new Route("true", [
+         Slice::new(SuccessController::class)->
+            outputMap(['output' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
       $Route->addAlias("true_alias");
       $this->addRoute($Route);
 
-      $Route = new Route("true", [TrueController::class]);
+      // Basic route for testing POST requests
+      $Route = new Route("true", [
+         Slice::new(SuccessController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
       $Route->setRequestMethod(Route::POST);
-      $Route->setTemplate("test");
       $this->addRoute($Route);
 
-      $Route = new Route("false", [FalseController::class]);
-      $Route->setFailureRoute("/test/error");
-      $Route->setTemplate("test");
-      $this->addRoute($Route);
-
-      $Route = new Route(Route::DEFAULT_ROUTE, [TrueController::class]);
-      $Route->setTemplate("test");
-      $this->addRoute($Route);
-
-      $Route = new Route("auth", [TrueController::class]);
-      $Route->setPermissionToken("TEST_TOKEN");
-      $Route->setTemplate("test");
-      $this->addRoute($Route);
-
-      $Route = new Route("mapped", []);
-      $Route->addInput("key1", true);
-      $Route->addInput("key2", false);
-      $Route->setOutputMap([
-         'key1' => "existing_key",
-         'key3' => "non_existent_key"
+      // Basic failure route
+      $Route = new Route("false", [
+         Slice::new(FailureController::class)->
+            exitStateMap([new ExitState(ExitState::FAILURE, ExitState::REDIRECT, "/test/error")])
       ]);
       $this->addRoute($Route);
 
-      $Route = new Route("error", [TrueController::class]);
-      $Route->setTemplate("test");
+      // Basic successful default route
+      $Route = new Route(Route::DEFAULT_ROUTE, [
+         Slice::new(SuccessController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
       $this->addRoute($Route);
 
-      $Route = new Route("exception", [ErrorController::class]);
-      $Route->setTemplate("test");
+      // Auth route for testing permission token enforcement
+      $Route = new Route("auth", [
+         Slice::new(SuccessController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $Route->setPermissionToken("TEST_TOKEN");
+      $this->addRoute($Route);
+
+      // Complex route using the zero-controller slice and I/O mapping
+      $Route = new Route("mapped", [
+         Slice::new()->
+            inputMap(['key1' => true, 'key2' => false])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $Route->setOutputMap(['key1' => "existing_key", 'key3' => "non_existent_key"]);
+      $this->addRoute($Route);
+
+      // Simple route for error-based tests to target and gracefully exit
+      $Route = new Route("error", [
+         Slice::new(SuccessController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $this->addRoute($Route);
+
+      // Route calling a faulty controller that throws exception for further error testing
+      $Route = new Route("exception", [
+         Slice::new(ErrorController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
       $this->addRoute($Route);
    }
 }
