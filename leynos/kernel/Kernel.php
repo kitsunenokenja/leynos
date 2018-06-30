@@ -462,6 +462,16 @@ class Kernel
       foreach(array_merge($this->_Group->globalSlices(), $Route->getSlices()) as $Slice)
       {
          $Controller = $Slice->getController();
+         if($Controller === null)
+         {
+            // Single-slice zero-controller routes are valid, so it must be possible to respond correctly. Immediately
+            // invoke the first defined exit state. Any other defined exit states in this situation are simply ignored.
+            $ExitState = $Slice->getExitStateMap()[0] ?? null;
+
+            // Because there is no controller processing, mapped inputs must be pushed along now
+            $data = array_merge($data, $Slice->getInputMap());
+            break;
+         }
 
          // Pass along the document root and accept language contents
          $Controller->setDocumentRoot($this->_document_root);
