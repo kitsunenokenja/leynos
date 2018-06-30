@@ -90,32 +90,11 @@ class Route
    private $_aliases = [];
 
    /**
-    * The file name of the template for HTML responses.
-    *
-    * @var string
-    */
-   private $_template;
-
-   /**
     * The permission token required to access the route. If this remains empty, no permission is required.
     *
     * @var string
     */
    private $_permission_token;
-
-   /**
-    * If set, a redirect is triggered to this route rather than responding normally.
-    *
-    * @var string
-    */
-   private $_redirect_route;
-
-   /**
-    * If set, a redirect is triggered to this route rather than responding normally upon failing controller.
-    *
-    * @var string
-    */
-   private $_failure_route;
 
    /**
     * Routine that modifies the global options.
@@ -259,26 +238,6 @@ class Route
    }
 
    /**
-    * Returns the template file name.
-    *
-    * @return string
-    */
-   public function getTemplate(): ?string
-   {
-      return $this->_template;
-   }
-
-   /**
-    * Sets the template file name.
-    *
-    * @param string $template
-    */
-   public function setTemplate(string $template): void
-   {
-      $this->_template = $template;
-   }
-
-   /**
     * Returns the permission token.
     *
     * @return string
@@ -296,46 +255,6 @@ class Route
    public function setPermissionToken(string $permission_token): void
    {
       $this->_permission_token = $permission_token;
-   }
-
-   /**
-    * Returns the redirect route.
-    *
-    * @return string
-    */
-   public function getRedirectRoute(): ?string
-   {
-      return $this->_redirect_route;
-   }
-
-   /**
-    * Sets the redirect route.
-    *
-    * @param string $redirect_route
-    */
-   public function setRedirectRoute(string $redirect_route): void
-   {
-      $this->_redirect_route = $redirect_route;
-   }
-
-   /**
-    * Returns the failure route.
-    *
-    * @return string
-    */
-   public function getFailureRoute(): ?string
-   {
-      return $this->_failure_route;
-   }
-
-   /**
-    * Sets the failure route.
-    *
-    * @param string $failure_route
-    */
-   public function setFailureRoute(string $failure_route): void
-   {
-      $this->_failure_route = $failure_route;
    }
 
    /**
