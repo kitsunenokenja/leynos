@@ -11,6 +11,8 @@
 
 namespace kitsunenokenja\leynos\controller;
 
+use kitsunenokenja\leynos\memory_store\MemoryStore;
+
 /**
  * Slice
  *
@@ -48,7 +50,12 @@ class Slice
     *
     * @var array
     */
-   private $_store_input_map = [];
+   private $_store_input_map = [
+      MemoryStore::REQUEST => [],
+      MemoryStore::SESSION => [],
+      MemoryStore::GLOBAL_STORE => [],
+      MemoryStore::LOCAL_STORE => []
+   ];
 
    /**
     * The output map allows the outputs of a controller to be aliased when handed off back to the framework, and
@@ -64,7 +71,12 @@ class Slice
     *
     * @var array
     */
-   private $_store_output_map = [];
+   private $_store_output_map = [
+      MemoryStore::REQUEST => [],
+      MemoryStore::SESSION => [],
+      MemoryStore::GLOBAL_STORE => [],
+      MemoryStore::LOCAL_STORE => []
+   ];
 
    /**
     * Array of Exit State objects that define response logic for any given exit state from the controller. To preserve
