@@ -12,6 +12,8 @@
 namespace kitsunenokenja\leynos\config\groups;
 
 use kitsunenokenja\leynos\config\Options;
+use kitsunenokenja\leynos\controller\{ExitState, Slice};
+use kitsunenokenja\leynos\memory_store\MemoryStore;
 use kitsunenokenja\leynos\route\{Group, Route};
 
 /**
@@ -49,7 +51,7 @@ class SampleGroup extends Group
       $Route = new Route("index", [
          Slice::new()->
             exitStateMap([
-               new ExitState(ExitState::SUCCESS, Route::RENDER, "index.twig")
+               new ExitState(ExitState::SUCCESS, ExitState::RENDER, "index.twig")
             ])
       ]);
       $this->addRoute($Route);
@@ -65,8 +67,8 @@ class SampleGroup extends Group
                MemoryStore::REQUEST => ["form_data"]
             ])->
             exitStateMap([
-               new ExitState(ExitState::SUCCESS, Route::REDIRECT, "/index/index"),
-               new ExitState(ExitState::FAILURE, Route::REDIRECT, "/error/error")
+               new ExitState(ExitState::SUCCESS, ExitState::REDIRECT, "/index/index"),
+               new ExitState(ExitState::FAILURE, ExitState::REDIRECT, "/error/error")
             ])
       ]);
       $Route->setRequestMethod(Route::POST);
@@ -83,9 +85,9 @@ class SampleGroup extends Group
                "special_value" => "value"
             ])->
             exitStateMap([
-               new ExitState(ExitState::SUCCESS, Route::RENDER, "another_route.twig"),
-               new ExitState(ExitState::FAILURE, Route::REDIRECT, "/error/generic_error"),
-               new ExitState(ExitState::DATABASE_FAILURE, Route::REDIRECT, "/error/db_error")
+               new ExitState(ExitState::SUCCESS, ExitState::RENDER, "another_route.twig"),
+               new ExitState(ExitState::FAILURE, ExitState::REDIRECT, "/error/generic_error"),
+               new ExitState(ExitState::DATABASE_FAILURE, ExitState::REDIRECT, "/error/db_error")
             ])
       ]);
       $Route->setSessionRequired(true);

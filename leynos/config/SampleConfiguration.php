@@ -78,7 +78,7 @@ class SampleConfiguration extends Config
          function($class)
          {
             $class = str_replace('\\', '/', $class);
-            $class = preg_replace('/^Predis/', "predis/src", $class);
+            $class = preg_replace('/^[Pp]redis/', "predis/src", $class);
             if(stream_resolve_include_path($file = "$class.php"))
             {
                /** @noinspection PhpIncludeInspection */
