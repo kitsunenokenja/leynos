@@ -53,8 +53,8 @@ class Slice
    private $_store_input_map = [
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
-      MemoryStore::GLOBAL_STORE => [],
-      MemoryStore::LOCAL_STORE => []
+      MemoryStore::LOCAL_STORE => [],
+      MemoryStore::GLOBAL_STORE => []
    ];
 
    /**
@@ -74,8 +74,8 @@ class Slice
    private $_store_output_map = [
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
-      MemoryStore::GLOBAL_STORE => [],
-      MemoryStore::LOCAL_STORE => []
+      MemoryStore::LOCAL_STORE => [],
+      MemoryStore::GLOBAL_STORE => []
    ];
 
    /**
@@ -169,7 +169,7 @@ class Slice
     */
    public function setStoreInputMap(array $map): void
    {
-      $this->_store_input_map = $map;
+      $this->_store_input_map = array_replace($this->_store_input_map, $map);
    }
 
    /**
@@ -181,7 +181,7 @@ class Slice
     */
    public function storeInputMap(array $map): Slice
    {
-      $this->_store_input_map = $map;
+      $this->_store_input_map = array_replace($this->_store_input_map, $map);
       return $this;
    }
 
@@ -236,7 +236,7 @@ class Slice
     */
    public function setStoreOutputMap(array $map): void
    {
-      $this->_store_output_map = $map;
+      $this->_store_output_map = array_replace($this->_store_output_map, $map);
    }
 
    /**
@@ -249,7 +249,7 @@ class Slice
     */
    public function storeOutputMap(array $map): Slice
    {
-      $this->_store_output_map = $map;
+      $this->_store_output_map = array_replace($this->_store_output_map, $map);
       return $this;
    }
 
