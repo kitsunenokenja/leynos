@@ -492,23 +492,23 @@ class Kernel
          $Controller->addInput("TemplateEngine", $this->_TemplateEngine);
 
          // Supply memory store values based on the provided mapping
-         foreach($Slice->getStoreInputMap()[MemoryStore::REQUEST] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::REQUEST] as $key => $alias)
          {
-            $Controller->addInput($store_key, $this->_Request->__get($store_key));
+            $Controller->addInput($alias, $this->_Request->__get($key));
          }
-         foreach($Slice->getStoreInputMap()[MemoryStore::SESSION] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::SESSION] as $key => $alias)
          {
-            $Controller->addInput($store_key, $this->_Session->getKey($store_key));
+            $Controller->addInput($alias, $this->_Session->getKey($key));
          }
-         foreach($Slice->getStoreInputMap()[MemoryStore::GLOBAL_STORE] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
          {
-            $Controller->addInput($store_key, $this->_MemStore->getKey($store_key));
+            $Controller->addInput($alias, $this->_MemStore->getKey($key));
          }
-         foreach($Slice->getStoreInputMap()[MemoryStore::LOCAL_STORE] as $store_key)
+         foreach($Slice->getStoreInputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
          {
             $Controller->addInput(
-               $store_key,
-               $this->_MemStore->getKey($this->_Config->getUserStoreNamespace() . $store_key)
+               $alias,
+               $this->_MemStore->getKey($this->_Config->getUserStoreNamespace() . $key)
             );
          }
 
@@ -528,17 +528,17 @@ class Kernel
 
          // Capture mapped outputs from controller
          $data = array_merge($data, $Controller->getOutputs());
-         foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $value)
+         foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
          {
-            $this->_Session->setKey($key, $value);
+            $this->_Session->setKey($alias, $data[$key]);
          }
-         foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $value)
+         foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
          {
-            $this->_MemStore->setKey($key, $value);
+            $this->_MemStore->setKey($alias, $data[$key]);
          }
-         foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $value)
+         foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
          {
-            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $key, $value);
+            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
          }
 
          // Capture current DB connections for persistence

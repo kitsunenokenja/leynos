@@ -169,6 +169,7 @@ class Slice
     */
    public function setStoreInputMap(array $map): void
    {
+      $this->_flattenMap($map);
       $this->_store_input_map = array_replace($this->_store_input_map, $map);
    }
 
@@ -181,6 +182,7 @@ class Slice
     */
    public function storeInputMap(array $map): Slice
    {
+      $this->_flattenMap($map);
       $this->_store_input_map = array_replace($this->_store_input_map, $map);
       return $this;
    }
@@ -236,6 +238,7 @@ class Slice
     */
    public function setStoreOutputMap(array $map): void
    {
+      $this->_flattenMap($map);
       $this->_store_output_map = array_replace($this->_store_output_map, $map);
    }
 
@@ -249,6 +252,7 @@ class Slice
     */
    public function storeOutputMap(array $map): Slice
    {
+      $this->_flattenMap($map);
       $this->_store_output_map = array_replace($this->_store_output_map, $map);
       return $this;
    }
@@ -286,6 +290,27 @@ class Slice
    {
       $this->_exit_state_map = $map;
       return $this;
+   }
+
+   /**
+    * Normalises a given store map by flattening it into a hash. All default-keyed strings become keyed to themselves by
+    * name, and single element hashes are broken out. This allows the kernel to process the store maps faster, and due
+    * to caching this procedure is not constantly repeated.
+    *
+    * Unaliased map entries effectively become aliased and the original integer keys are dropped along the way.
+    *
+    * @param array &$store_map
+    */
+   private function _flattenMap(array &$store_map): void
+   {
+      foreach($store_map as $store => &$store_map)
+      {
+         foreach($store_map as $index => $entry)
+         {
+            !is_array($entry) ? $store_map[$entry] = $entry : $store_map[key($entry)] = current($entry);
+            unset($store_map[$index]);
+         }
+      }
    }
 }
 
