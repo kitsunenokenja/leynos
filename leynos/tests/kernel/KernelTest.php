@@ -89,6 +89,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the invocation of a 3-slice route.
+    *
+    * @runInSeparateProcess
+    */
+   public function testSliceChain(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/success-chain";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the internal routing for handling a root index (GET /) request.
     *
     * @runInSeparateProcess
@@ -109,6 +121,30 @@ class KernelTest extends TestCase
    {
       $_SERVER['REQUEST_URI'] = "/test/mapped/json";
       $this->expectOutputString(json_encode(['existing_key' => true, 'non_existent_key' => null]));
+      new Kernel(new TestConfig());
+   }
+
+   /**
+    * Tests the basic usage of an input map, having a value pass through a controller.
+    *
+    * @runInSeparateProcess
+    */
+   public function testInputMap(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/input_map_test";
+      $this->expectOutputString("value");
+      new Kernel(new TestConfig());
+   }
+
+   /**
+    * Tests the I/O for store maps.
+    *
+    * @runInSeparateProcess
+    */
+   public function testStoreMap(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/store_map_test";
+      $this->expectOutputString("value");
       new Kernel(new TestConfig());
    }
 
@@ -134,6 +170,26 @@ class KernelTest extends TestCase
       $TestConfig = new TestConfig();
       $TestConfig->setErrorRoute("/invalid/route");
       $_SERVER['REQUEST_URI'] = "/test/false";
+      try
+      {
+         new Kernel($TestConfig);
+      }
+      catch(Exception $E)
+      {
+         $this->assertFalse(true);
+      }
+      $this->assertTrue(true);
+   }
+
+   /**
+    * Tests the proper response of an early exit from a failing slice mid-chain.
+    *
+    * @runInSeparateProcess
+    */
+   public function testFailureChain(): void
+   {
+      $TestConfig = new TestConfig();
+      $_SERVER['REQUEST_URI'] = "/test/failure-chain";
       try
       {
          new Kernel($TestConfig);

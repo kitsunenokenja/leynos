@@ -12,6 +12,7 @@
 namespace kitsunenokenja\leynos\tests\mocks;
 
 use kitsunenokenja\leynos\controller\{ExitState, Slice};
+use kitsunenokenja\leynos\memory_store\MemoryStore;
 use kitsunenokenja\leynos\route\{Group, Route};
 
 /**
@@ -56,6 +57,48 @@ class TestGroup extends Group
       $Route = new Route(Route::DEFAULT_ROUTE, [
          Slice::new(SuccessController::class)->
             exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $this->addRoute($Route);
+
+      // Basic I/O test
+      $Route = new Route("input_map_test", [
+         Slice::new(IOController::class)->
+            inputMap(['input' => "value"])->
+            outputMap(['output' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $this->addRoute($Route);
+
+      // Store map test to channel an input to a store then pipe it to the next slice for output
+      $Route = new Route("store_map_test", [
+         Slice::new(IOController::class)->
+            inputMap(['input' => "value"])->
+            storeOutputMap([MemoryStore::GLOBAL_STORE => ["output"]]),
+         Slice::new(IOController::class)->
+            storeInputMap([MemoryStore::GLOBAL_STORE => [['output' => "input"]]])->
+            outputMap(['input' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $this->addRoute($Route);
+
+      // Successful chain of 3 slices
+      $Route = new Route("success-chain", [
+         Slice::new(SuccessController::class),
+         Slice::new(SuccessController::class),
+         Slice::new(SuccessController::class)->
+            outputMap(['output' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER)])
+      ]);
+      $this->addRoute($Route);
+
+      // Failing chain of 3 slices
+      $Route = new Route("failure-chain", [
+         Slice::new(SuccessController::class),
+         Slice::new(FailureController::class)->
+            exitStateMap([new ExitState(ExitState::FAILURE, ExitState::REDIRECT, "/test/error")]),
+         Slice::new(SuccessController::class)->
+            outputMap(['output' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER)])
       ]);
       $this->addRoute($Route);
 
