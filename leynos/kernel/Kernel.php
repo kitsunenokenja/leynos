@@ -528,9 +528,14 @@ class Kernel
 
          // Capture mapped outputs from controller
          $data = array_merge($data, $Controller->getOutputs());
-         foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
+         if($Slice->getStoreOutputMap()[MemoryStore::SESSION] !== [])
          {
-            $this->_Session->setKey($alias, $data[$key]);
+            $this->_Session->open();
+            foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
+            {
+               $this->_Session->setKey($alias, $data[$key]);
+            }
+            $this->_Session->close();
          }
          foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
          {
