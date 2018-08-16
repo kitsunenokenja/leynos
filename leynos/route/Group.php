@@ -72,7 +72,7 @@ abstract class Group
     * The array of global slices is a series of controller slices that always execute prior to a specific route's series
     * of controllers for any route within the group.
     *
-    * @return string[]
+    * @return Slice[]
     */
    public function globalSlices(): array
    {
