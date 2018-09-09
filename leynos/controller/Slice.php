@@ -54,7 +54,8 @@ class Slice
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
       MemoryStore::LOCAL_STORE => [],
-      MemoryStore::GLOBAL_STORE => []
+      MemoryStore::GLOBAL_STORE => [],
+      MemoryStore::VOLATILE_STORE => []
    ];
 
    /**
@@ -75,7 +76,8 @@ class Slice
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
       MemoryStore::LOCAL_STORE => [],
-      MemoryStore::GLOBAL_STORE => []
+      MemoryStore::GLOBAL_STORE => [],
+      MemoryStore::VOLATILE_STORE => []
    ];
 
    /**

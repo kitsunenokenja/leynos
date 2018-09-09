@@ -511,6 +511,11 @@ class Kernel
                $this->_MemStore->getKey($this->_Config->getUserStoreNamespace() . $key)
             );
          }
+         foreach($Slice->getStoreInputMap()[MemoryStore::VOLATILE_STORE] as $key => $alias)
+         {
+            $Controller->addInput($alias, $this->_MemStore->getKey($key));
+            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $key, null);
+         }
 
          // Pass a reference to the data array. This allows chaining outputs from previous controllers as input
          // to another.
@@ -542,6 +547,10 @@ class Kernel
             $this->_MemStore->setKey($alias, $data[$key]);
          }
          foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
+         {
+            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::VOLATILE_STORE] as $key => $alias)
          {
             $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
          }
