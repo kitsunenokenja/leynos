@@ -291,6 +291,8 @@ class Kernel
       $this->_request_method  = $_SERVER['REQUEST_METHOD'] === "POST" ? Route::POST : Route::GET;
       $this->_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null;
 
+      $this->_HTTPHeaders->setProtocol($_SERVER['SERVER_PROTOCOL']);
+
       unset($_SERVER);
    }
 

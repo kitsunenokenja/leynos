@@ -21,9 +21,6 @@ namespace kitsunenokenja\leynos\http;
  */
 class Headers
 {
-   // Protocol and version used by all headers
-   const VERSION = "HTTP/1.1 ";
-
    // MIME content types
    const HTML = "text/html";
    const JSON = "application/json";
@@ -31,6 +28,14 @@ class Headers
    const ODS  = "application/vnd.oasis.opendocument.spreadsheet";
    const XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
    const PDF  = "application/pdf";
+
+   /**
+    * The HTTP protocol of the current execution's context. The protocol in use will be reflected in response headers in
+    * kind. For example, requests over HTTP/2.0 will receive response headers specifying HTTP/2.0 for the protocol.
+    *
+    * @var string
+    */
+   private $_protocol;
 
    /**
     * Outputs the header for a cookie.
@@ -51,6 +56,16 @@ class Headers
    }
 
    /**
+    * Sets the server protocol and version.
+    *
+    * @param string $protocol
+    */
+   public function setProtocol(string $protocol): void
+   {
+      $this->_protocol = $protocol;
+   }
+
+   /**
     * Outputs an HTTP 303 See Other redirection header for PRG. This method will end script execution as no more output
     * may follow such a header.
     *
@@ -58,7 +73,7 @@ class Headers
     */
    public function redirect(string $redirect_url): void
    {
-      header(self::VERSION . "303 See Other");
+      header("{$this->_protocol} 303 See Other");
       header("Location: $redirect_url");
    }
 
@@ -89,7 +104,7 @@ class Headers
     */
    public function forbidden(): void
    {
-      header(self::VERSION . "403 Forbidden");
+      header("{$this->_protocol} 403 Forbidden");
    }
 
    /**
@@ -97,7 +112,7 @@ class Headers
     */
    public function notFound(): void
    {
-      header(self::VERSION . "404 Not Found");
+      header("{$this->_protocol} 404 Not Found");
    }
 
    /**
@@ -105,6 +120,6 @@ class Headers
     */
    public function internalServerError(): void
    {
-      header(self::VERSION . "500 Internal Server Error");
+      header("{$this->_protocol} 500 Internal Server Error");
    }
 }
