@@ -1,6 +1,6 @@
 # Leynos
 ## Overview ##
-Lightweight PHP7 MVC framework featuring atomic controller chains. PHP ≥ 7.1.0 is required.
+Lightweight PHP7 MVC framework featuring atomic controller chains dubbed as slices. PHP ≥ 7.1.0 is required.
 
 The Leynos framework project aims to provide an open source MVC framework written entirely in PHP7. This framework is
 designed to be as flexible as it is compact. Most PHP applications built with the MVC pattern running atop a framework
@@ -18,16 +18,19 @@ Instructions for installing and using the framework will be documented in the
 
 ## Features ##
 The following list of features is not exhaustive, but indicates some of this framework's capabilities.
-* Chaining single-purpose atomic controllers
+* Chaining single-purpose atomic controllers, called slices
 * Custom routing patterns and route aliasing
 * Permission token protection for routes
-* Input mapping for controllers
-* Response/routing handling within the framework
+* Sanitisation and wrapping of PHP's super-globals
+* I/O mapping and aliasing support for controllers
+* Response/routing handling with unlimited exit status handling
 * Lazy-loading of PDO DB connections
 * Support for memcached & Redis memory stores included
 * Support for Smarty & Twig template engines included
-* Namespaces of keys for memory stores
+* Namespaces of keys for memory stores for global and local storage
+* Volatile memory store interface providing a native self-expiring mechanic
 * Binary view support with PDF and CSV/ODS/XLSX support included, provided by [FPDF](http://www.fpdf.org/) and
 [Spout](https://github.com/box/spout) libraries respectively
+* HTTP/2 compliant
 
 Please see the [wiki](https://github.com/kitsunenokenja/leynos/wiki) for further details of the aforementioned features.
