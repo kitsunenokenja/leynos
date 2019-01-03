@@ -456,6 +456,7 @@ class Kernel
     * @return ExitState
     *
     * @throws ControllerFailureException Thrown if execution concludes but no exit state was ever assigned.
+    * @throws RoutingException           Thrown if a rewrite fails due to a malformed or undefined route.
     */
    private function _executeControllers(Route $Route, array &$data): ExitState
    {
@@ -595,7 +596,10 @@ class Kernel
          $data = $mapped_data;
       }
 
-      return $ExitState;
+      if($ExitState->getMode() === ExitState::REWRITE)
+         return $this->_executeControllers($this->_parseRouteRequest($ExitState->getTarget()), $data);
+      else
+         return $ExitState;
    }
 
    /**

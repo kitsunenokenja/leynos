@@ -60,6 +60,20 @@ class TestGroup extends Group
       ]);
       $this->addRoute($Route);
 
+      // Minimal rewrite routing
+      $Route = new Route("rewrite", [
+         Slice::new()->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::REWRITE, "/test/rewrite_io")])
+      ]);
+      $Route->addInput("input", "success");
+      $this->addRoute($Route);
+      $Route = new Route("rewrite_io", [
+         Slice::new(IOController::class)->
+            outputMap(['output' => "output"])->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $this->addRoute($Route);
+
       // Basic I/O test
       $Route = new Route("input_map_test", [
          Slice::new(IOController::class)->

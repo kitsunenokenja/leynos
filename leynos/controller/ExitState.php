@@ -50,6 +50,19 @@ class ExitState
    const REDIRECT = 1;
 
    /**
+    * Rewrite mode transfers control from the current slice sequence execution to another immediately. Typically a
+    * traditional redirect is used which involves completing an execution and yielding the redirect to the client, which
+    * in turn triggers the next new execution. In some cases, however, it is rather favourable to construct similar
+    * routes that internally connect to one another, without resorting to forcing the client to follow a redirect, and
+    * without resorting to heavily duplicating routing programming.
+    *
+    * Note that this behaviour is exclusive to executing slice sequences, and does not reboot the entire route
+    * processing logic in the kernel, so there can be dangerous consequences such as effectively bypassing an
+    * authorisation protection placed on a given route.
+    */
+   const REWRITE = 2;
+
+   /**
     * Standard return code for success. This represents a controller has accomplished its objectives and returns with
     * confirmation of success. This default state may be used for any sort of success.
     */

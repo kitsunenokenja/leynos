@@ -116,6 +116,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests an internally rewritten slice.
+    *
+    * @runInSeparateProcess
+    */
+   public function testRewrite(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/rewrite";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the output mapping for a route.
     *
     * @runInSeparateProcess
