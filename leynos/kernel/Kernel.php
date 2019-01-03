@@ -371,7 +371,7 @@ class Kernel
     *
     * @param string $route_request
     *
-    * @returns Route
+    * @return Route
     *
     * @throws RoutingException Thrown if the request is malformed or refers to an undefined route.
     */
