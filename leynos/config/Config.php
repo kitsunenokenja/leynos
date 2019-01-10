@@ -13,6 +13,7 @@ namespace kitsunenokenja\leynos\config;
 
 use Closure;
 use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
+use kitsunenokenja\leynos\permission\PermissionSet;
 use kitsunenokenja\leynos\view\{TemplateView, TwigView};
 
 /**
@@ -299,4 +300,16 @@ abstract class Config
     * @param Session $Session
     */
    abstract public function setUserStoreNamespace(Session $Session): void;
+
+   /**
+    * Returns the set of permissions defined for the user of the current session. The framework expects any established
+    * session to be able to yield the permission set for the user in order to enforce route access restrictions.
+    *
+    * @param Session $Session
+    *
+    * @return PermissionSet
+    */
+   abstract public function getPermissionSet(Session $Session): PermissionSet;
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

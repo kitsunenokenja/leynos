@@ -12,8 +12,8 @@
 namespace kitsunenokenja\leynos\tests\mocks;
 
 use kitsunenokenja\leynos\config\{Config, Options};
-use kitsunenokenja\leynos\memory_store\MemoryStore;
-use kitsunenokenja\leynos\memory_store\Session;
+use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
+use kitsunenokenja\leynos\permission\PermissionSet;
 
 /**
  * TestConfig
@@ -85,5 +85,16 @@ class TestConfig extends Config
    public function setUserStoreNamespace(Session $Session): void
    {
       return;
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function getPermissionSet(Session $Session): PermissionSet
+   {
+      $PermissionSet = new PermissionSet();
+      $PermissionSet->enablePermission("TEST_TOKEN");
+
+      return $PermissionSet;
    }
 }

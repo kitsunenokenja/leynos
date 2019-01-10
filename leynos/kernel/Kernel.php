@@ -19,6 +19,7 @@ use kitsunenokenja\leynos\file_system\PostFile;
 use kitsunenokenja\leynos\http\{Headers as HTTPHeaders, Request};
 use kitsunenokenja\leynos\memory_store\{MemoryStore, Session};
 use kitsunenokenja\leynos\message\Message;
+use kitsunenokenja\leynos\permission\PermissionSet;
 use kitsunenokenja\leynos\route\{Group, Route, RoutingException};
 use kitsunenokenja\leynos\view\{BinaryView, JSONView, TemplateView, View};
 use PDO;
@@ -73,12 +74,12 @@ class Kernel
    private $_accept_language;
 
    /**
-    * Hash of permissions that belong to the authenticated user. These are used to authorise users to execute certain
-    * actions and influence template rendering.
+    * Set of permissions that belong to the authenticated user. The permissions are used to authorise users to execute
+    * certain actions and influence template rendering.
     *
-    * @var bool[]
+    * @var PermissionSet
     */
-   private $_permissions = [];
+   private $_PermissionSet;
 
    /**
     * Application configuration object.
@@ -215,9 +216,16 @@ class Kernel
             $this->_HTTPHeaders->redirect($this->_Config->getOptions()->getLoginRoute());
          }
 
-         // Check user authorisation
-         if($Route->getPermissionToken() !== null && empty($this->_permissions[$Route->getPermissionToken()]))
-            throw new UnauthorizedActionException("Unauthorised request from authenticated user.");
+         // Check user access authorisation if the route is protected
+         if($Route->getPermissionToken() !== null)
+         {
+            // Permission set is only retrieved as needed. Abort via exception upon unauthorisation.
+            if(($this->_PermissionSet = $this->_Config->getPermissionSet($this->_Session)) !== null)
+            {
+               if(!$this->_PermissionSet->hasPermission($Route->getPermissionToken()))
+                  throw new UnauthorizedActionException("Unauthorised request from authenticated user.");
+            }
+         }
 
          // Prepare a template engine for controllers if the route requires it
          if($this->_Config->getOptions()->getEnableTemplateEngine())
@@ -628,7 +636,7 @@ class Kernel
                $data['_messages'][] = $Message->jsonSerialize();
 
             // Make user permissions available in the view for content filtering & control
-            $data['_permissions'] = $this->_permissions;
+            $data['_permissions'] = $this->_PermissionSet !== null ? $this->_PermissionSet->getPermissions() : [];
 
             // Prepare the view with the template to be rendered
             $View = $this->_Config->getTemplateEngine($this->_document_root);

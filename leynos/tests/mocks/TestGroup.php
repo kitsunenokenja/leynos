@@ -116,12 +116,21 @@ class TestGroup extends Group
       ]);
       $this->addRoute($Route);
 
-      // Auth route for testing permission token enforcement
+      // Auth route for testing granted access via permission token enforcement
       $Route = new Route("auth", [
          Slice::new(SuccessController::class)->
+            outputMap(['output' => "output"])->
             exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
       ]);
       $Route->setPermissionToken("TEST_TOKEN");
+      $this->addRoute($Route);
+
+      // Auth route for testing denied access via permission token enforcement
+      $Route = new Route("invalid_auth", [
+         Slice::new(SuccessController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
+      ]);
+      $Route->setPermissionToken("UNKNOWN_TOKEN");
       $this->addRoute($Route);
 
       // Complex route using the zero-controller slice and I/O mapping

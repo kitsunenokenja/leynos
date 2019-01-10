@@ -217,6 +217,30 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the enforcement of permissions by ensuring the presence of a permissions leads to permitted route access.
+    *
+    * @runInSeparateProcess
+    */
+   public function testEnabledPermission(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/auth";
+      $this->expectOutputString("success");
+      new Kernel(new TestConfig());
+   }
+
+   /**
+    * Tests the enforcement of permissions by ensuring the presence of a permissions leads to unauthorised route access.
+    *
+    * @runInSeparateProcess
+    */
+   public function testDisabledPermission(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/invalid_auth";
+      new Kernel(new TestConfig());
+      $this->assertEquals(403, http_response_code());
+   }
+
+   /**
     * Tests the handling of an invalid route request.
     *
     * @runInSeparateProcess
@@ -265,3 +289,5 @@ class KernelTest extends TestCase
       $this->assertEquals(500, http_response_code());
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :
