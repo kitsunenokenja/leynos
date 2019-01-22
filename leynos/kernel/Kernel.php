@@ -549,21 +549,25 @@ class Kernel
             $this->_Session->open();
             foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
             {
-               $this->_Session->setKey($alias, $data[$key]);
+               if(isset($data[$key]))
+                  $this->_Session->setKey($alias, $data[$key]);
             }
             $this->_Session->close();
          }
          foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
          {
-            $this->_MemStore->setKey($alias, $data[$key]);
+            if(isset($data[$key]))
+               $this->_MemStore->setKey($alias, $data[$key]);
          }
          foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
          {
-            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
+            if(isset($data[$key]))
+               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
          }
          foreach($Slice->getStoreOutputMap()[MemoryStore::VOLATILE_STORE] as $key => $alias)
          {
-            $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
+            if(isset($data[$key]))
+               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
          }
 
          // Capture current DB connections for persistence
