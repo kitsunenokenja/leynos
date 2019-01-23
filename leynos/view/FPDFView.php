@@ -75,3 +75,5 @@ class FPDFView implements BinaryView
       return Headers::PDF;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

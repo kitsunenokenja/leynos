@@ -210,3 +210,5 @@ class Cookie
       $this->_http_only = $http_only;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

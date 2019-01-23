@@ -52,3 +52,5 @@ class RequestTest extends TestCase
       $this->assertEmpty($Request->__get("escape"), "Escaped markup purge failed.");
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

@@ -30,3 +30,5 @@ class TestFormatter extends Formatter
       $this->_Writer->addRow(["Column 1", "Column 2", "Column 3"]);
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

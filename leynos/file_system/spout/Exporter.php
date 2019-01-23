@@ -134,3 +134,5 @@ class Exporter
       $this->_Formatter->open($this->_Source->getAbsolutePath());
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

@@ -273,3 +273,5 @@ abstract class Controller
     */
    abstract public function main(): int;
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

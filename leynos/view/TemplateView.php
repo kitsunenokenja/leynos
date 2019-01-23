@@ -37,3 +37,5 @@ abstract class TemplateView implements View
       $this->_template = $template;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

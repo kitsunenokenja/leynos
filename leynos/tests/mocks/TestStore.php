@@ -40,3 +40,5 @@ class TestStore extends MemoryStore
       $this->_data[$key] = $value;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

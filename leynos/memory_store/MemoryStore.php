@@ -65,3 +65,5 @@ abstract class MemoryStore
     */
    abstract public function setKey(string $key, $value): void;
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

@@ -74,3 +74,5 @@ class Redis extends MemoryStore
       }
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

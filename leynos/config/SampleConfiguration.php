@@ -140,3 +140,5 @@ class SampleConfiguration extends Config
       $this->_user_store_namespace = (string) $Session->getKey("user_id");
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

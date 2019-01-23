@@ -160,3 +160,5 @@ abstract class Formatter
       return (new StyleBuilder())->build();
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

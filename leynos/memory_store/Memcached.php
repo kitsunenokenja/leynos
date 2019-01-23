@@ -68,3 +68,5 @@ class Memcached extends MemoryStore
          throw new MemoryStoreException();
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

@@ -195,3 +195,5 @@ class PostFile
       $this->_error = $error;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

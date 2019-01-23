@@ -36,3 +36,5 @@ class JSONView implements View
       echo $json;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

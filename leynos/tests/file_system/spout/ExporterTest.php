@@ -50,3 +50,5 @@ class ExporterTest extends TestCase
       $this->assertContains("4,5,6", $data);
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

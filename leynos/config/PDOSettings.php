@@ -110,3 +110,5 @@ class PDOSettings
       $this->_attributes[$attribute] = $value;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

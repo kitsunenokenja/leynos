@@ -123,3 +123,5 @@ class Headers
       header("{$this->_protocol} 500 Internal Server Error");
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

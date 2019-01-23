@@ -31,3 +31,4 @@ class TestView extends TemplateView
    }
 }
 
+# vim: set ts=3 sw=3 tw=120 et :

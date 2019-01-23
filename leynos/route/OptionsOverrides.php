@@ -59,3 +59,5 @@ trait OptionsOverrides
       $this->_overrides[Options::ENABLE_TEMPLATE_ENGINE] = $setting;
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :

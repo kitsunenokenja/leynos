@@ -157,3 +157,5 @@ class TestGroup extends Group
       $this->addRoute($Route);
    }
 }
+
+# vim: set ts=3 sw=3 tw=120 et :
