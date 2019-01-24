@@ -164,6 +164,18 @@ class KernelTest extends TestCase
    }
 
    /**
+    * Tests the output map via aliasing.
+    *
+    * @runInSeparateProcess
+    */
+   public function testOutputMap(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/output_map_test";
+      $this->expectOutputString("value");
+      new Kernel(new TestConfig());
+   }
+
+   /**
     * Tests the error routing by calling a route that intentionally fails.
     *
     * @runInSeparateProcess

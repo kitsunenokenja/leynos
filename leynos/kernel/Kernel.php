@@ -542,8 +542,22 @@ class Kernel
          // Capture controller messages
          $this->_Messages = array_merge($this->_Messages, $Controller->getMessages());
 
-         // Capture mapped outputs from controller
-         $data = array_merge($data, $Controller->getOutputs());
+         // Yield only the mapped outputs via aliases, or capture everything by default
+         $outputs = $Controller->getOutputs();
+         if($Slice->getOutputMap() !== [])
+         {
+            foreach($Slice->getOutputMap() as $key => $alias)
+            {
+               if(isset($outputs[$key]))
+                  $data[$alias] = $outputs[$key];
+            }
+         }
+         else
+         {
+            $data = array_merge($data, $outputs);
+         }
+
+         // Save mapped outputs to memory stores
          if($Slice->getStoreOutputMap()[MemoryStore::SESSION] !== [])
          {
             $this->_Session->open();
