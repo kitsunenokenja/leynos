@@ -634,25 +634,28 @@ class Kernel
     * @param ExitState $ExitState Signal containing directives for the response.
     * @param array     $data      Accumulation of data for the view to consume.
     *
-    * @throws Exception                  General failure for inappropriate attempts to render binary views.
+    * @throws Exception General failure for inappropriate attempts to render binary views.
     */
    private function _renderView(ExitState $ExitState, array $data): void
    {
+      // Flush messages for standard rendering response types
+      if($this->_response_mode === "HTML" || $this->_response_mode === "JSON")
+      {
+         if(!empty($this->_Session->getKey("_Messages")))
+         {
+            $this->_Session->open();
+            $this->_Session->setKey("_Messages", null);
+         }
+         $data['_messages'] = [];
+         foreach($this->_Messages as $Message)
+            $data['_messages'][] = $Message->jsonSerialize();
+      }
+
       // Initialise the view engine with respect to the response mode
       switch($this->_response_mode)
       {
          case "HTML":
          default:
-            // Flush messages
-            if(!empty($this->_Session->getKey("_Messages")))
-            {
-               $this->_Session->open();
-               $this->_Session->setKey("_Messages", null);
-            }
-            $data['_messages'] = [];
-            foreach($this->_Messages as $Message)
-               $data['_messages'][] = $Message->jsonSerialize();
-
             // Make user permissions available in the view for content filtering & control
             $data['_permissions'] = $this->_PermissionSet !== null ? $this->_PermissionSet->getPermissions() : [];
 

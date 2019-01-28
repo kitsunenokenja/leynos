@@ -166,6 +166,13 @@ class TestGroup extends Group
             exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])
       ]);
       $this->addRoute($Route);
+
+      // Route that yields a message rendering in JSON response
+      $Route = new Route("message", [
+         Slice::new(MessageController::class)->
+            exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER)])
+      ]);
+      $this->addRoute($Route);
    }
 }
 

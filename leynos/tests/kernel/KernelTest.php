@@ -13,6 +13,7 @@ namespace kitsunenokenja\leynos\tests\kernel;
 
 use Exception;
 use kitsunenokenja\leynos\kernel\Kernel;
+use kitsunenokenja\leynos\message\Message;
 use kitsunenokenja\leynos\tests\mocks\TestConfig;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
@@ -135,7 +136,9 @@ class KernelTest extends TestCase
    public function testMappedOutputRoute(): void
    {
       $_SERVER['REQUEST_URI'] = "/test/mapped/json";
-      $this->expectOutputString(json_encode(['existing_key' => true, 'non_existent_key' => null]));
+      $this->expectOutputString(
+         json_encode(['existing_key' => true, 'non_existent_key' => null, '_messages' => []])
+      );
       new Kernel(new TestConfig());
    }
 
@@ -299,6 +302,19 @@ class KernelTest extends TestCase
       $this->expectException(Warning::class);
       new Kernel(new TestConfig());
       $this->assertEquals(500, http_response_code());
+   }
+
+   /**
+    * Tests message rendering in JSON mode.
+    *
+    * @runInSeparateProcess
+    */
+   public function testMessages(): void
+   {
+      $_SERVER['REQUEST_URI'] = "/test/message/json";
+      $Message = new Message(Message::SUCCESS, "Success message");
+      $this->expectOutputString(json_encode(['_messages' => [$Message->jsonSerialize()]]));
+      new Kernel(new TestConfig());
    }
 }
 
