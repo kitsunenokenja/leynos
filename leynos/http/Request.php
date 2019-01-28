@@ -6,7 +6,7 @@
  * under the GPL license. This license is included as part of the project and
  * is also available at the following web page:
  *
- * http://www.gnu.org/licenses/gpl.html
+ * https://www.gnu.org/licenses/gpl.html
  */
 
 namespace kitsunenokenja\leynos\http;
