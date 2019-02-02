@@ -64,7 +64,7 @@ class Slice
     *
     * @var string[]
     */
-   private $_output_map = [];
+   private $_output_map;
 
    /**
     * Store output map array contains arrays, keyed by memory stores, of variable names or key/value pairs to alias
@@ -194,7 +194,7 @@ class Slice
     *
     * @return string[]
     */
-   public function getOutputMap(): array
+   public function getOutputMap(): ?array
    {
       return $this->_output_map;
    }

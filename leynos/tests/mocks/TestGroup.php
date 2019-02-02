@@ -99,7 +99,7 @@ class TestGroup extends Group
          Slice::new(IOController::class)->
             inputMap(['input' => "value"])->
             outputMap(['output' => "aliased_output"])->
-            storeOutputMap([MemoryStore::GLOBAL_STORE => [['aliased_output' => "output"]]]),
+            storeOutputMap([MemoryStore::GLOBAL_STORE => [['output' => "output"]]]),
          Slice::new(IOController::class)->
             storeInputMap([MemoryStore::GLOBAL_STORE => [['output' => "input"]]])->
             exitStateMap([new ExitState(ExitState::SUCCESS, ExitState::RENDER, "test")])

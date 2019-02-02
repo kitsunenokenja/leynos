@@ -542,9 +542,36 @@ class Kernel
          // Capture controller messages
          $this->_Messages = array_merge($this->_Messages, $Controller->getMessages());
 
-         // Yield only the mapped outputs via aliases, or capture everything by default
+         // Save mapped outputs to memory stores
          $outputs = $Controller->getOutputs();
-         if($Slice->getOutputMap() !== [])
+         if($Slice->getStoreOutputMap()[MemoryStore::SESSION] !== [])
+         {
+            $this->_Session->open();
+            foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
+            {
+               if(isset($outputs[$key]))
+                  $this->_Session->setKey($alias, $outputs[$key]);
+            }
+            $this->_Session->close();
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
+         {
+            if(isset($outputs[$key]))
+               $this->_MemStore->setKey($alias, $outputs[$key]);
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
+         {
+            if(isset($outputs[$key]))
+               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $outputs[$key]);
+         }
+         foreach($Slice->getStoreOutputMap()[MemoryStore::VOLATILE_STORE] as $key => $alias)
+         {
+            if(isset($outputs[$key]))
+               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $outputs[$key]);
+         }
+
+         // Yield only the mapped outputs via aliases, or capture everything by default
+         if($Slice->getOutputMap() !== null)
          {
             foreach($Slice->getOutputMap() as $key => $alias)
             {
@@ -555,33 +582,6 @@ class Kernel
          else
          {
             $data = array_merge($data, $outputs);
-         }
-
-         // Save mapped outputs to memory stores
-         if($Slice->getStoreOutputMap()[MemoryStore::SESSION] !== [])
-         {
-            $this->_Session->open();
-            foreach($Slice->getStoreOutputMap()[MemoryStore::SESSION] as $key => $alias)
-            {
-               if(isset($data[$key]))
-                  $this->_Session->setKey($alias, $data[$key]);
-            }
-            $this->_Session->close();
-         }
-         foreach($Slice->getStoreOutputMap()[MemoryStore::GLOBAL_STORE] as $key => $alias)
-         {
-            if(isset($data[$key]))
-               $this->_MemStore->setKey($alias, $data[$key]);
-         }
-         foreach($Slice->getStoreOutputMap()[MemoryStore::LOCAL_STORE] as $key => $alias)
-         {
-            if(isset($data[$key]))
-               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
-         }
-         foreach($Slice->getStoreOutputMap()[MemoryStore::VOLATILE_STORE] as $key => $alias)
-         {
-            if(isset($data[$key]))
-               $this->_MemStore->setKey($this->_Config->getUserStoreNamespace() . $alias, $data[$key]);
          }
 
          // Capture current DB connections for persistence
