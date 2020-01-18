@@ -12,9 +12,9 @@
 namespace kitsunenokenja\leynos\view;
 
 use LogicException;
-use Twig_Environment;
-use Twig_Error;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Error\Error as TwigError;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * TwigView
@@ -31,7 +31,7 @@ class TwigView extends TemplateView
    /**
     * Internal reference to the Twig environment.
     *
-    * @var Twig_Environment
+    * @var Environment
     */
    protected $_Twig;
 
@@ -67,8 +67,8 @@ class TwigView extends TemplateView
    protected function _initializeTwig(string $document_root): void
    {
       // Prepare the template engine
-      $this->_Twig = new Twig_Environment(
-         new Twig_Loader_Filesystem("$document_root/templates"),
+      $this->_Twig = new Environment(
+         new FilesystemLoader("$document_root/templates"),
          [
             'cache' => "$document_root/templates/cache",
             'strict_variables' => true
@@ -121,7 +121,7 @@ class TwigView extends TemplateView
       {
          echo $this->_Twig->render($this->_template, $data);
       }
-      catch(Twig_Error $E)
+      catch(TwigError $E)
       {
          throw new TemplateException($E->getMessage(), $E->getCode(), $E);
       }
