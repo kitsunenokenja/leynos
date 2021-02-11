@@ -47,35 +47,35 @@ class PostFile
     *
     * @var string
     */
-   private $_name;
+   private string $_name;
 
    /**
     * MIME type of the file.
     *
     * @var string
     */
-   private $_type;
+   private string $_type;
 
    /**
     * Size of the file in bytes.
     *
     * @var int
     */
-   private $_size;
+   private int $_size;
 
    /**
     * Absolute path of the temporary file created.
     *
     * @var string
     */
-   private $_temp_name;
+   private string $_temp_name;
 
    /**
     * Status or error code of the file.
     *
     * @var int
     */
-   private $_error;
+   private int $_error;
 
    /**
     * Creates a new post file object.

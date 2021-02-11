@@ -37,7 +37,7 @@ class KernelTest extends TestCase
       $_SERVER = [
          'DOCUMENT_ROOT'        => __DIR__,
          'REQUEST_METHOD'       => "GET",
-         'HTTP_ACCEPT_LANGUAGE' => "",
+         'HTTP_ACCEPT_LANGUAGE' => null,
          'SCRIPT_NAME'          => __FILE__,
          'SERVER_PROTOCOL'      => "HTTP/2"
       ];

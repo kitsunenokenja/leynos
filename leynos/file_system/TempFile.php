@@ -37,7 +37,7 @@ class TempFile
     *
     * @var string
     */
-   private $_absolute_path;
+   private string $_absolute_path;
 
    /**
     * Creates a temporary file.

@@ -33,14 +33,14 @@ class Slice
     *
     * @var Controller
     */
-   private $_Controller;
+   private ?Controller $_Controller = null;
 
    /**
     * Input map array containing key/value pairs keyed by the aliases.
     *
     * @var array
     */
-   private $_input_map = [];
+   private array $_input_map = [];
 
    /**
     * Store input map array contains arrays of aliases keyed by memory store keys indicating which values from each
@@ -50,7 +50,7 @@ class Slice
     *
     * @var array
     */
-   private $_store_input_map = [
+   private array $_store_input_map = [
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
       MemoryStore::LOCAL_STORE => [],
@@ -64,7 +64,7 @@ class Slice
     *
     * @var string[]
     */
-   private $_output_map;
+   private ?array $_output_map = null;
 
    /**
     * Store output map array contains arrays, keyed by memory stores, of variable names or key/value pairs to alias
@@ -72,7 +72,7 @@ class Slice
     *
     * @var array
     */
-   private $_store_output_map = [
+   private array $_store_output_map = [
       MemoryStore::REQUEST => [],
       MemoryStore::SESSION => [],
       MemoryStore::LOCAL_STORE => [],
@@ -86,7 +86,7 @@ class Slice
     *
     * @var ExitState[]
     */
-   private $_exit_state_map = [];
+   private array $_exit_state_map = [];
 
    /**
     * Creates a new slice object.

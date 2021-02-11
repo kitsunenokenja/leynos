@@ -31,28 +31,28 @@ abstract class Config
     *
     * @var Options
     */
-   protected $_Options;
+   protected Options $_Options;
 
    /**
     * Closures to register autoloaders. The application's and 3rd party library autoloader functions should be set.
     *
     * @var Closure[]
     */
-   protected $_Autoloaders = [];
+   protected array $_Autoloaders = [];
 
    /**
     * The timezone string for the PHP environment.
     *
     * @var string
     */
-   protected $_timezone = "UTC";
+   protected string $_timezone = "UTC";
 
    /**
     * The locale string for the PHP environment.
     *
     * @var string
     */
-   protected $_locale = "en_US.UTF-8";
+   protected string $_locale = "en_US.UTF-8";
 
    /**
     * The routing pattern to be enforced by the framework and to identify a valid request for resolving which action to
@@ -80,7 +80,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_routing_pattern = '#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#';
+   protected string $_routing_pattern = '#^/(\w+)/(\w+)(?:/(\w+))?(?:\?.*)?$#';
 
    /**
     * The only route that violates the routing pattern yet must be valid is the request for root index i.e. GET /
@@ -91,7 +91,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_root_index_route = "/main/index";
+   protected string $_root_index_route = "/main/index";
 
    /**
     * The error route for re-routing to handle internal failures. This should be a defined route as the default fallback
@@ -104,7 +104,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_error_route = "/error/error";
+   protected string $_error_route = "/error/error";
 
    /**
     * Class name of the template view implementation for the framework to use to render templates. The default Twig view
@@ -114,7 +114,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_template_engine_class = TwigView::class;
+   protected string $_template_engine_class = TwigView::class;
 
    /**
     * The string token to use as the namespace for cache keys. This allows multiple environments on the same server to
@@ -122,7 +122,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_cache_namespace = "";
+   protected string $_cache_namespace = "";
 
    /**
     * The string token to use as the namespace for user-exclusive keys in the memory store. This allows safe storage of
@@ -134,7 +134,7 @@ abstract class Config
     *
     * @var string
     */
-   protected $_user_store_namespace = "";
+   protected string $_user_store_namespace = "";
 
    /**
     * Settings for opening DB connections. Keys of this array serve as aliases for each set of settings. The key
@@ -142,21 +142,21 @@ abstract class Config
     *
     * @var PDOSettings[]
     */
-   protected $_PDOSettings = [];
+   protected array $_PDOSettings = [];
 
    /**
     * This array contains all the routing groups that define the application.
     *
     * @var string[]
     */
-   protected $_routing_map = [];
+   protected array $_routing_map = [];
 
    /**
     * Returns the framework options.
     *
     * @return Options
     */
-   final public function getOptions(): Options
+   final public function getOptions(): ?Options
    {
       return $this->_Options;
    }

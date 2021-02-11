@@ -33,7 +33,7 @@ class TwigView extends TemplateView
     *
     * @var Environment
     */
-   protected $_Twig;
+   protected Environment $_Twig;
 
    /**
     * Initialises Twig and its settings.

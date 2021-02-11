@@ -30,7 +30,7 @@ class SmartyView extends TemplateView
     *
     * @var Smarty
     */
-   protected $_Smarty;
+   protected Smarty $_Smarty;
 
    /**
     * Initialises Smarty and its settings.

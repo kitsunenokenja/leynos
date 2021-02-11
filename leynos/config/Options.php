@@ -31,14 +31,14 @@ class Options
     *
     * @var bool
     */
-   private $_session_required = true;
+   private bool $_session_required = true;
 
    /**
     * The designated login route for redirecting an unauthenticated user from a route that has session required enabled.
     *
     * @var string
     */
-   private $_login_route = null;
+   private ?string $_login_route = null;
 
    /**
     * Determines whether a template engine should be initialised for usage within controllers. Some controllers require
@@ -49,7 +49,7 @@ class Options
     *
     * @var bool
     */
-   private $_enable_template_engine = false;
+   private bool $_enable_template_engine = false;
 
    /**
     * Determines whether the framework will use the memory store to cache routing group configurations. Generally this
@@ -58,7 +58,7 @@ class Options
     *
     * @var bool
     */
-   private $_enable_routing_cache = true;
+   private bool $_enable_routing_cache = true;
 
    /**
     * Returns the required session flag.

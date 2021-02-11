@@ -27,7 +27,7 @@ abstract class Group
     *
     * @var Route[][]
     */
-   protected $_Routes = [Route::GET => [], Route::POST => []];
+   protected array $_Routes = [Route::GET => [], Route::POST => []];
 
    /**
     * Adds a route to the group by its name as well as any aliases it may have.

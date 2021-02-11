@@ -30,14 +30,14 @@ class FPDFView implements BinaryView
     *
     * @var FPDF
     */
-   private $_FPDF;
+   private FPDF $_FPDF;
 
    /**
     * The file name for output.
     *
     * @var string
     */
-   private $_file_name;
+   private string $_file_name;
 
    /**
     * Creates the view by preparing with the FPDF object to render.

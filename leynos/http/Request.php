@@ -25,21 +25,21 @@ class Request
     *
     * @var string
     */
-   private $_group;
+   private string $_group;
 
    /**
     * The route action portion of the request identifying which action of a set of routes to invoke.
     *
     * @var string
     */
-   private $_route;
+   private string $_route;
 
    /**
     * Internal sanitised storage for all HTTP request parameters.
     *
     * @var array
     */
-   private $_data = [];
+   private array $_data = [];
 
    /**
     * The constructor parses all data from $_REQUEST and filters out undesirable strings to mitigate XSS/injections.

@@ -28,7 +28,7 @@ class Redis extends MemoryStore
     *
     * @var RedisClient
     */
-   private $_Redis;
+   private RedisClient $_Redis;
 
    /**
     * Connects to the Redis store.

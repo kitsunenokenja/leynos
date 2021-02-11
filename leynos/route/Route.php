@@ -38,28 +38,28 @@ class Route
     *
     * @var string
     */
-   private $_name;
+   private string $_name;
 
    /**
     * The HTTP request for which method the route is defined e.g. GET/POST.
     *
     * @var int
     */
-   private $_request_method = self::GET;
+   private int $_request_method = self::GET;
 
    /**
     * Any additional inputs may be defined.
     *
     * @var array
     */
-   private $_inputs = [];
+   private array $_inputs = [];
 
    /**
     * Any symbolic keys for each store whose values to prepare as proper inputs.
     *
     * @var string[][]
     */
-   private $_store_inputs_map = [
+   private array $_store_inputs_map = [
       MemoryStore::REQUEST      => [],
       MemoryStore::SESSION      => [],
       MemoryStore::LOCAL_STORE  => [],
@@ -72,14 +72,14 @@ class Route
     *
     * @var array
     */
-   private $_output_map;
+   private ?array $_output_map = null;
 
    /**
     * The sequence of controller slices to execute.
     *
     * @var Slice[]
     */
-   private $_slices = [];
+   private array $_slices = [];
 
     /**
      * Set of aliases for the route. Any number of aliases can be defined for the route and will function identically
@@ -87,14 +87,14 @@ class Route
      *
      * @var string[]
      */
-   private $_aliases = [];
+   private array $_aliases = [];
 
    /**
     * The permission token required to access the route. If this remains empty, no permission is required.
     *
     * @var string
     */
-   private $_permission_token;
+   private ?string $_permission_token = null;
 
    /**
     * Routine that modifies the global options.

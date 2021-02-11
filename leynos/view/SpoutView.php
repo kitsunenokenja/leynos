@@ -32,21 +32,21 @@ class SpoutView implements BinaryView
     *
     * @var Formatter
     */
-   private $_Formatter;
+   private Formatter $_Formatter;
 
    /**
     * The type of the spreadsheet. This must be a valid type defined by Spout's spreadsheet types.
     *
     * @var string
     */
-   private $_spreadsheet_type = SpreadsheetType::CSV;
+   private string $_spreadsheet_type = SpreadsheetType::CSV;
 
    /**
     * The name of the file attributed to the export.
     *
     * @var string
     */
-   private $_filename;
+   private string $_filename;
 
    /**
     * Creates the view by preparing Spout with the specified spreadsheet type.

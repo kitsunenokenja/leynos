@@ -25,7 +25,7 @@ abstract class TemplateView implements View
     *
     * @var string
     */
-   protected $_template;
+   protected string $_template;
 
    /**
     * Sets the relative path to the template to render.

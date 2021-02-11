@@ -35,7 +35,7 @@ class Headers
     *
     * @var string
     */
-   private $_protocol;
+   private string $_protocol;
 
    /**
     * Outputs the header for a cookie.

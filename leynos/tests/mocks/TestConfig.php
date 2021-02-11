@@ -29,7 +29,7 @@ class TestConfig extends Config
     *
     * @var bool
     */
-   private $_auth = true;
+   private bool $_auth = true;
 
    /**
     * Creates a new config instance.

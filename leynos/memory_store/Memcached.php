@@ -27,7 +27,7 @@ class Memcached extends MemoryStore
     *
     * @var MemcachedClient
     */
-   private $_Memcached;
+   private MemcachedClient $_Memcached;
 
    /**
     * Connects to the Memcached store.

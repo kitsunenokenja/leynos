@@ -27,7 +27,7 @@ trait OptionsOverrides
     *
     * @var bool[]
     */
-   protected $_overrides = [];
+   protected array $_overrides = [];
 
    /**
     * Returns the options overrides.

@@ -46,14 +46,14 @@ class Message implements JsonSerializable
     *
     * @var int
     */
-   private $_type;
+   private int $_type;
 
    /**
     * The contents of the message to be shown.
     *
     * @var string
     */
-   private $_message;
+   private string $_message;
 
    /**
     * Creates a new message object.

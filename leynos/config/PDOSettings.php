@@ -29,35 +29,35 @@ class PDOSettings
     *
     * @var string
     */
-   private $_dsn;
+   private string $_dsn;
 
    /**
     * Username for DB credentials.
     *
     * @var string
     */
-   private $_username;
+   private string $_username;
 
    /**
     * Password for DB credentials.
     *
     * @var string
     */
-   private $_password;
+   private string $_password;
 
    /**
     * Optional parameters for the DB connection.
     *
     * @var array
     */
-   private $_options;
+   private array $_options;
 
    /**
     * Attribute/value pairs to be applied to the PDO instance.
     *
     * @var array
     */
-   private $_attributes = [];
+   private array $_attributes = [];
 
    /**
     * Creates a PDO settings object storing the parameters for PDO for later use.

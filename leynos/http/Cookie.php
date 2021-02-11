@@ -26,49 +26,49 @@ class Cookie
     *
     * @var string
     */
-   private $_name;
+   private string $_name;
 
    /**
     * Value to be stored in the cookie.
     *
     * @var string
     */
-   private $_value;
+   private ?string $_value;
 
    /**
     * Unix timestamp of the expiry date. 0 is defined as expiring at the end of session.
     *
     * @var int
     */
-   private $_expiry = 0;
+   private int $_expiry = 0;
 
    /**
     * Server path for which the cookie is valid.
     *
     * @var string
     */
-   private $_path;
+   private ?string $_path;
 
    /**
     * Domain or subdomain for which the cookie is valid.
     *
     * @var string
     */
-   private $_domain;
+   private ?string $_domain;
 
    /**
     * Indicates whether the cookie is only available over HTTPS.
     *
     * @var bool
     */
-   private $_secure = false;
+   private bool $_secure = false;
 
    /**
     * Indicates whether the cookie is only accessible through HTTP i.e. unavailable to browser scripting.
     *
     * @var bool
     */
-   private $_http_only = false;
+   private bool $_http_only = false;
 
    /**
     * Creates a new Cookie object.

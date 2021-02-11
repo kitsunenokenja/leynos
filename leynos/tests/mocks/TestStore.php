@@ -22,7 +22,7 @@ use kitsunenokenja\leynos\memory_store\MemoryStore;
  */
 class TestStore extends MemoryStore
 {
-   private $_data = [];
+   private array $_data = [];
 
    /**
     * {@inheritdoc}

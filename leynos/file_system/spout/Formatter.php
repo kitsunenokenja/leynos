@@ -31,7 +31,7 @@ abstract class Formatter
     *
     * @var WriterInterface
     */
-   protected $_Writer;
+   protected WriterInterface $_Writer;
 
    /**
     * Temporary file used for writing the generated spreadsheet output. The contents of this file will be streamed to
@@ -39,7 +39,7 @@ abstract class Formatter
     *
     * @var TempFile
     */
-   protected $_Temp;
+   protected TempFile $_Temp;
 
    /**
     * Resource handle to the source file containing the plain CSV to be formatted into the final spreadsheet.
@@ -54,7 +54,7 @@ abstract class Formatter
     *
     * @var string[]
     */
-   protected $_headers = [];
+   protected array $_headers = [];
 
    /**
     * Creates the formatter.

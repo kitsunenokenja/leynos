@@ -2,11 +2,10 @@
 ## Overview ##
 Lightweight PHP7 MVC framework featuring atomic controller chains dubbed as slices.
 
-The Leynos framework project aims to provide an open source MVC framework written entirely in PHP7. This framework is
-designed to be as flexible as it is compact. Most PHP applications built with the MVC pattern running atop a framework
-or master controller inherently require that the code in the framework always executes on every request. Therefore the
-objective should be to provide the essentials to facilitate a functional MVC design in the application, and nothing
-more.
+The Leynos framework project aims to provide an open source MVC framework. This framework is designed to be as flexible
+as it is compact. Most PHP applications built with the MVC pattern running atop a framework or master controller
+inherently require that the code in the framework always executes on every request. Therefore the objective should be to
+provide the essentials to facilitate a functional MVC design in the application, and nothing more.
 
 Leynos is designed to be flexible and reprogrammable via configuration. With proper interfacing, libraries can plug
 right into Leynos to power it which in turn powers your application. Connect template engines such as Twig or Smarty,

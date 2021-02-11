@@ -108,7 +108,7 @@ class ExitState
     *
     * @var int
     */
-   private $_state;
+   private int $_state;
 
    /**
     * The Route class constant designating which sort of action is to be taken. This must be either a render or redirect
@@ -118,7 +118,7 @@ class ExitState
     *
     * @var int
     */
-   private $_mode;
+   private int $_mode;
 
    /**
     * If the mode is redirect, the target must be an action route. Otherwise, it is a template name for rendering. The
@@ -126,7 +126,7 @@ class ExitState
     *
     * @var string
     */
-   private $_target;
+   private ?string $_target;
 
    /**
     * Creates an exit state object.

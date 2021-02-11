@@ -25,7 +25,7 @@ class PermissionSet
     *
     * @var bool[]
     */
-   private $_permissions = [];
+   private array $_permissions = [];
 
    /**
     * Return the set of permissions.

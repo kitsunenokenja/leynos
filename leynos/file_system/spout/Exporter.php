@@ -40,21 +40,21 @@ class Exporter
     *
     * @var string
     */
-   private $_filename = "export";
+   private string $_filename = "export";
 
    /**
     * Temporary file which will store the plain CSV data to be formatted.
     *
     * @var TempFile
     */
-   private $_Source;
+   private TempFile $_Source;
 
    /**
     * Reference to the formatter that will process the source data.
     *
     * @var Formatter
     */
-   private $_Formatter;
+   private Formatter $_Formatter;
 
    /**
     * Creates an export manager.

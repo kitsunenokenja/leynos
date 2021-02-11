@@ -33,7 +33,7 @@ abstract class MemoryStore
     *
     * @var string
     */
-   protected $_namespace = "";
+   protected string $_namespace = "";
 
    /**
     * Sets the namespace prefix for the memory store.
