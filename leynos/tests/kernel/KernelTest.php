@@ -31,7 +31,7 @@ class KernelTest extends TestCase
    /**
     * {@inheritdoc}
     */
-   protected function setUp()
+   protected function setUp(): void
    {
       // Forge plausible environment values for both the kernel and PHPUnit to run.
       $_SERVER = [
@@ -299,7 +299,7 @@ class KernelTest extends TestCase
    public function testUnauthorizedRequest(): void
    {
       $_SERVER['REQUEST_URI'] = "/test/exception";
-      $this->expectException(Warning::class);
+      $this->expectWarning(Warning::class);
       new Kernel(new TestConfig());
       $this->assertEquals(500, http_response_code());
    }

@@ -9,19 +9,19 @@
   -->
 <phpunit
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
+   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+   colors="true"
    bootstrap="tests/bootstrap.php"
+   convertDeprecationsToExceptions="true"
    convertErrorsToExceptions="true"
    convertNoticesToExceptions="true"
    convertWarningsToExceptions="true"
    backupGlobals="true">
    <testsuites>
-      <testsuite>
+      <testsuite name="leynos">
          <directory>tests</directory>
-         <exclude>
-            <file>tests/bootstrap.php</file>
-            <directory>tests/mocks</directory>
-         </exclude>
+         <exclude>tests/bootstrap.php</exclude>
+         <exclude>tests/mocks</exclude>
       </testsuite>
    </testsuites>
 </phpunit>

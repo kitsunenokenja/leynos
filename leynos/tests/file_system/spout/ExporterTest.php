@@ -45,9 +45,9 @@ class ExporterTest extends TestCase
 
       // Check the contents to ensure exporter and formatter performed correctly
       $data = file_get_contents($Formatter->getTempFile()->getAbsolutePath());
-      $this->assertContains('"Column 1","Column 2","Column 3"', $data);
-      $this->assertContains("1,2,3", $data);
-      $this->assertContains("4,5,6", $data);
+      $this->assertStringContainsString('"Column 1","Column 2","Column 3"', $data);
+      $this->assertStringContainsString("1,2,3", $data);
+      $this->assertStringContainsString("4,5,6", $data);
    }
 }
 

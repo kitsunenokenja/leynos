@@ -1,5 +1,5 @@
-# PHPStorm IDE
-.idea
+# phpunit
+.phpunit.result.cache
 
 # vim
 *.swp
