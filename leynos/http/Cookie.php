@@ -33,7 +33,7 @@ class Cookie
     *
     * @var string
     */
-   private ?string $_value;
+   private ?string $_value = null;
 
    /**
     * Unix timestamp of the expiry date. 0 is defined as expiring at the end of session.
@@ -47,14 +47,14 @@ class Cookie
     *
     * @var string
     */
-   private ?string $_path;
+   private ?string $_path = null;
 
    /**
     * Domain or subdomain for which the cookie is valid.
     *
     * @var string
     */
-   private ?string $_domain;
+   private ?string $_domain = null;
 
    /**
     * Indicates whether the cookie is only available over HTTPS.
