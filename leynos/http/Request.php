@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2016.
  *
@@ -152,7 +152,7 @@ class Request
          {
             // Strip HTML escapes and aggressively filter XSS attempts by repeatedly stripping tags until none remain
             for(
-               $array[$k] = strip_tags(htmlspecialchars_decode($v));
+               $array[$k] = strip_tags(htmlspecialchars_decode((string) $v));
                $array[$k] !== strip_tags($array[$k]);
                $array[$k] = strip_tags($array[$k])
             );

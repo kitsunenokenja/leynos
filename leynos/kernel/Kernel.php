@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2016.
  *
@@ -267,7 +267,7 @@ class Kernel
          else
          {
             // Register the failure in the log
-            trigger_error($E, E_USER_WARNING);
+            trigger_error((string) $E, E_USER_WARNING);
 
             $this->_HTTPHeaders->internalServerError();
          }
@@ -284,7 +284,7 @@ class Kernel
          {
             // This last-resort fallback should never fail, but if it does, log the incident to expose the
             // misconfiguration.
-            trigger_error($E, E_USER_ERROR);
+            trigger_error((string) $E, E_USER_ERROR);
          }
       }
    }

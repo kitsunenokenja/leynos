@@ -1,6 +1,6 @@
 # Leynos
 ## Overview ##
-Lightweight PHP7 MVC framework featuring atomic controller chains dubbed as slices.
+Lightweight PHP MVC framework featuring atomic controller chains dubbed as slices.
 
 The Leynos framework project aims to provide an open source MVC framework. This framework is designed to be as flexible
 as it is compact. Most PHP applications built with the MVC pattern running atop a framework or master controller
