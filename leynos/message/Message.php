@@ -90,7 +90,7 @@ class Message implements JsonSerializable
    /**
     * {@inheritdoc}
     */
-   public function jsonSerialize()
+   public function jsonSerialize(): mixed
    {
       return [
          'type'    => $this->_type,
